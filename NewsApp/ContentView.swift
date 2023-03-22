@@ -8,14 +8,27 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject var auth = AuthService()
+    @StateObject var router = Router()
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        Group {
+            if !auth.isInitialized {
+                SplashScreen()
+                    .transition(.opacity)
+            }
+            else if !auth.isAuthenticated {
+                NonAuthorizedScreen()
+                    .environmentObject(router)
+                    .environmentObject(auth)
+            } else {
+                AuthorizedScreen()
+                    .environmentObject(router)
+                    .environmentObject(auth)
+            }
+        }.onAppear {
+            auth.listenToAuthState()
         }
-        .padding()
     }
 }
 
