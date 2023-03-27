@@ -10,7 +10,7 @@ import Swift
 import SwiftUI
 
 
-final class AccountInitializationViewModel: ObservableObject {
+final class FollowViewModel: ObservableObject {
     init (userId: String, uid: String) {
         self.userId = userId
         self.uid = uid

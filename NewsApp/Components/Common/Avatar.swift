@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct Avatar: View {
-    let url: URL
+    let url: String
     let size: AvatarSize
     let type: AvatarType
     
@@ -18,34 +18,14 @@ struct Avatar: View {
             return 140
         case .medium:
             return 70
+        case .small:
+            return 20
         }
     }
-    
 
     @ViewBuilder
     var body: some View {
-        let img = AsyncImage(
-            url: url,
-            transaction: Transaction(animation: .easeInOut)
-        ) { phase in
-            switch phase {
-            case .empty:
-                ProgressView()
-                    .tint(Color.blue)
-                    .scaleEffect(2)
-            case .success(let image):
-                image
-                    .resizable()
-                    .scaledToFill()
-                    .transition(.scale(scale: 0.001, anchor: .center))
-            case .failure:
-                Image(systemName: "wifi.slash")
-            @unknown default:
-                EmptyView()
-            }
-        }
-        .frame(width: sizeValue, height: sizeValue)
-        .background(Color.gray20)
+        let img = RemoteImage(url: url, width: .constant(sizeValue), height: .constant(sizeValue))
         
         if type == .circular {
             img
@@ -59,14 +39,18 @@ struct Avatar: View {
     enum AvatarSize {
         case big
         case medium
+        case small
     }
     enum AvatarType {
         case circular
         case rectangular
     }
 }
-//struct Avatar_Previews: PreviewProvider {
-//    static var previews: some View {
-//        Avatar()
-//    }
-//}
+struct Avatar_Previews: PreviewProvider {
+    static var previews: some View {
+        VStack {
+            Avatar(url: "https://images.unsplash.com/photo-1678398315175-32e77ac02145?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2486&q=80", size: .big, type: .circular)
+            Avatar(url: "https://images.unsplash.com/photo-1678398315175-32e77ac02145?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2486&q=80", size: .big, type: .rectangular)
+        }
+    }
+}

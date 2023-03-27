@@ -18,9 +18,24 @@ final class Router: ObservableObject {
         }
     }
     
-    enum Routes {
+    enum Routes: String {
+        // MARK: auth
         case login
         case registration
+        
+        // MARK: home
         case home
+        case latest
+        case popular
+        case notifications
+        
+        // MARK: search
+        case search
+        
+        // MARK: bookmarks
+        case bookmarks
+        
+        // MARK: profile
+        case profile
     }
 }

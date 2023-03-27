@@ -56,17 +56,23 @@ struct InitializationSecondStep: View {
                             GeometryReader { geometry in
                                 Group {
                                     if let photo = photo {
-                                        Avatar(url: photo, size: .big, type: .circular)
+                                        Avatar(url: photo.absoluteString, size: .big, type: .circular)
                                     } else {
                                         Circle()
                                             .fill(Color.gray20)
                                             .frame(width: 140, height: 140)
                                             .overlay(
-                                                isUploadingImage ?
-                                                ProgressView()
-                                                    .tint(Color.blue)
-                                                    .scaleEffect(2)
-                                                : nil
+                                                Group {
+                                                    if isUploadingImage {
+                                                        ProgressView()
+                                                            .tint(Color.blue)
+                                                            .scaleEffect(2)
+                                                    } else {                 
+                                                        Image(systemName: "plus")
+                                                            .resizable()
+                                                            .frame(width: 30, height: 30)
+                                                    }
+                                                }
                                             )
                                     }
                                 }

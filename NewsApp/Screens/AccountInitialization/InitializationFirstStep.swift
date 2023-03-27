@@ -15,32 +15,38 @@ struct InitializationFirstStep: View {
     ) {
         self.next = next
         self.auth = auth
-        self._model = StateObject(wrappedValue: AccountInitializationViewModel(userId: auth.user!.id!, uid: auth.user!.uid))
+        self._model = StateObject(wrappedValue: FollowViewModel(userId: auth.user!.id!, uid: auth.user!.uid))
     }
     
     var next: () -> Void
     @ObservedObject var auth: AuthService
-    @StateObject private var model: AccountInitializationViewModel
+    @StateObject private var model: FollowViewModel
     @State private var search = ""
     
+    func searchSuggestions () {
+        withAnimation {
+            model.getSuggestions(search)
+        }
+    }
+ 
     var body: some View {
         VStack(spacing: 0) {
             VStack(spacing: 0) {
                 HStack {
-                    Text("Выберите источники новостей")
+                    Text("Выберите источники новостей ggg")
                         .poppinsFont(.footnoteBold)
                         .foregroundColor(.dark)
                 }
                 .frame(maxWidth: .infinity, alignment: .center)
-                Input(value: $search, placeholder: "Поиск", rightIconPerform: {}) {
+                Input(value: $search, placeholder: "Поиск", rightIconPerform: {
+                    searchSuggestions()
+                }, rightIcon: {
                     Image(systemName: "magnifyingglass")
                         .font(.system(size: 20))
                         .foregroundColor(.body)
-                }
-                .onChange(of: search) { value in
-                    withAnimation {
-                        model.getSuggestions(value)
-                    }
+                })
+                .onChange(of: search) { _ in
+                    searchSuggestions()
                 }
                 .padding(.vertical, 16)
                 ScrollView(showsIndicators: false) {
@@ -54,7 +60,7 @@ struct InitializationFirstStep: View {
                                             .frame(width: 70, height: 70)
                                             .foregroundColor(.body)
                                     } else {
-                                        Avatar(url: URL(string: user.photo)!, size: .medium, type: .rectangular)
+                                        Avatar(url: user.photo, size: .medium, type: .rectangular)
                                     }
                                 }
                                 .padding(.horizontal, 12)
@@ -100,6 +106,7 @@ struct InitializationFirstStep: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding(.vertical, 24)
+        
     }
 }
 

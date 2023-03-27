@@ -26,7 +26,8 @@ struct ContentView: View {
                     .environmentObject(router)
                     .environmentObject(auth)
             }
-        }.onAppear {
+        }
+        .onAppear {
             auth.listenToAuthState()
         }
     }

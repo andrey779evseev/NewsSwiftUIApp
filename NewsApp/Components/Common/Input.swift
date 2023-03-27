@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-extension Input where RightIcon == EmptyView {
+extension Input where LeftIcon == EmptyView {
     init(
         value: Binding<String>,
         label: String? = nil,
@@ -17,7 +17,9 @@ extension Input where RightIcon == EmptyView {
         isPassword: Bool = false,
         autocapitalization: Bool = true,
         error: String? = nil,
-        rightIconPerform: (() -> Void)? = nil
+        rightIconPerform: (() -> Void)? = nil,
+        leftIconPerform: (() -> Void)? = nil,
+        rightIcon: @escaping () -> RightIcon
     ) {
         self.init(
             value: value,
@@ -29,14 +31,14 @@ extension Input where RightIcon == EmptyView {
             autocapitalization: autocapitalization,
             error: error,
             rightIconPerform: rightIconPerform,
-            rightIcon: {EmptyView()}
+            leftIconPerform: leftIconPerform,
+            rightIcon: rightIcon,
+            leftIcon: {EmptyView()}
         )
     }
 }
 
-/// if you provide custom right icon you must also provide right icon perform function
-
-struct Input<RightIcon: View>: View {
+extension Input where RightIcon == EmptyView {
     init(
         value: Binding<String>,
         label: String? = nil,
@@ -47,7 +49,72 @@ struct Input<RightIcon: View>: View {
         autocapitalization: Bool = true,
         error: String? = nil,
         rightIconPerform: (() -> Void)? = nil,
-        rightIcon: @escaping () -> RightIcon
+        leftIconPerform: (() -> Void)? = nil,
+        leftIcon: @escaping () -> LeftIcon
+    ) {
+        self.init(
+            value: value,
+            label: label,
+            placeholder: placeholder,
+            disabled: disabled,
+            required: required,
+            isPassword: isPassword,
+            autocapitalization: autocapitalization,
+            error: error,
+            rightIconPerform: rightIconPerform,
+            leftIconPerform: leftIconPerform,
+            rightIcon: {EmptyView()},
+            leftIcon: leftIcon
+        )
+    }
+}
+
+extension Input where RightIcon == EmptyView, LeftIcon == EmptyView {
+    init(
+        value: Binding<String>,
+        label: String? = nil,
+        placeholder: String,
+        disabled: Bool = false,
+        required: Bool = false,
+        isPassword: Bool = false,
+        autocapitalization: Bool = true,
+        error: String? = nil,
+        rightIconPerform: (() -> Void)? = nil,
+        leftIconPerform: (() -> Void)? = nil
+    ) {
+        self.init(
+            value: value,
+            label: label,
+            placeholder: placeholder,
+            disabled: disabled,
+            required: required,
+            isPassword: isPassword,
+            autocapitalization: autocapitalization,
+            error: error,
+            rightIconPerform: rightIconPerform,
+            leftIconPerform: leftIconPerform,
+            rightIcon: {EmptyView()},
+            leftIcon: {EmptyView()}
+        )
+    }
+}
+
+/// if you provide custom side icon you must also provide side icon perform function
+
+struct Input<LeftIcon: View, RightIcon: View>: View {
+    init(
+        value: Binding<String>,
+        label: String? = nil,
+        placeholder: String,
+        disabled: Bool = false,
+        required: Bool = false,
+        isPassword: Bool = false,
+        autocapitalization: Bool = true,
+        error: String? = nil,
+        rightIconPerform: (() -> Void)? = nil,
+        leftIconPerform: (() -> Void)? = nil,
+        rightIcon: @escaping () -> RightIcon,
+        leftIcon: @escaping () -> LeftIcon
     ) {
         self._value = value
         self.label = label
@@ -58,6 +125,8 @@ struct Input<RightIcon: View>: View {
         self.autocapitalization = autocapitalization
         self.error = error
         self.rightIconPerform = rightIconPerform
+        self.leftIconPerform = leftIconPerform
+        self.leftIcon = leftIcon
         self.rightIcon = rightIcon
     }
     
@@ -70,6 +139,8 @@ struct Input<RightIcon: View>: View {
     var autocapitalization = true
     var error: String? = nil
     var rightIconPerform: (() -> Void)? = nil
+    var leftIconPerform: (() -> Void)? = nil
+    @ViewBuilder var leftIcon: () -> LeftIcon
     @ViewBuilder var rightIcon: () -> RightIcon
     @FocusState private var isFocused: Bool
     @State private var isActive = false
@@ -77,6 +148,20 @@ struct Input<RightIcon: View>: View {
     
     var isError: Bool {
         error != nil
+    }
+    
+    var hasLeftIcon: Bool {
+//        leftIconPerform != nil
+        !(
+            leftIcon() is EmptyView
+        )
+    }
+    
+    var hasRightIcon: Bool {
+//        rightIconPerform != nil
+        !(
+            rightIcon() is EmptyView
+        )
     }
     
     @ViewBuilder
@@ -134,39 +219,51 @@ struct Input<RightIcon: View>: View {
                     }
                     .frame(maxWidth: .infinity)
                     .frame(height: 48)
-                    .padding(.leading, 10)
-                    .padding(.trailing, 48)
+                    .padding(.leading, hasLeftIcon ? 44 : 10)
+                    .padding(.trailing, 44)
                     .placeholder(when: value == "") {
                         Text(placeholder)
                             .poppinsFont(.caption)
                             .foregroundColor(.body)
-                            .padding(.leading, 10)
+                            .padding(.leading, hasLeftIcon ? 44 : 10)
                     }
                     .background(background)
                     .overlay(
-                        isActive || isPassword || rightIconPerform != nil ?
-                        HStack {
-                            if rightIcon() is EmptyView {
-                                Image(systemName: isPassword ? isHidden ? "eye.slash" : "eye" : "xmark")
-                                    .foregroundColor(isError ? .errorDark : .body)
-                                    .font(.system(.body, weight: .bold))
-                            } else {
-                                rightIcon()
+                        Group {
+                            if isActive || isPassword || hasRightIcon {
+                                HStack {
+                                    if hasRightIcon {
+                                        rightIcon()
+                                    } else {
+                                        Image(systemName: isPassword ? isHidden ? "eye.slash" : "eye" : "xmark")
+                                            .foregroundColor(isError ? .errorDark : .body)
+                                            .font(.system(.body, weight: .bold))
+                                    }
+                                }
+                                .frame(width: 40, height: 48, alignment: .center)
+                                .position(x: geometry.size.width - 24, y: 24)
+                                .onTapGesture {
+                                    if hasRightIcon {
+                                        rightIconPerform!()
+                                    } else if isPassword {
+                                        isHidden = !isHidden
+                                    } else {
+                                        value.removeAll()
+                                    }
+                                }
+                                .transition(.opacity)
                             }
-                        }
-                            .frame(width: 48, height: 48, alignment: .center)
-                            .position(x: geometry.size.width - 24, y: 24)
-                            .onTapGesture {
-                                if let rightIconPerform = rightIconPerform {
-                                    rightIconPerform()
-                                } else if isPassword {
-                                    isHidden = !isHidden
-                                } else {
-                                    value.removeAll()
+                            if hasLeftIcon {
+                                HStack {
+                                   leftIcon()
+                                }
+                                .frame(width: 40, height: 48, alignment: .center)
+                                .position(x: 24, y: 24)
+                                .onTapGesture {
+                                    leftIconPerform!()
                                 }
                             }
-                            .transition(.opacity)
-                        : nil
+                        }
                     )
             }
             .frame(height: 48)
@@ -189,9 +286,20 @@ struct Input_Previews: PreviewProvider {
         VStack(spacing: 16) {
             Input(value: .constant("Sfgsdf"), label: "Email", placeholder: "Введите Email", autocapitalization: true)
             Input(value: .constant(""), label: "Email", placeholder: "Введите Email", required: true)
-            Input(value: .constant(""), label: "Email", placeholder: "Введите Email", required: true, rightIconPerform: {print("gg")}) {
-                Image(systemName: "pencil")
-            }
+            Input(value: .constant(""), label: "Email", placeholder: "Введите Email", required: true, rightIconPerform: {print("gg")}, rightIcon: {Image(systemName: "pencil")})
+            Input(
+                value: .constant(""),
+                label: "Email",
+                placeholder: "Введите Email",
+                required: true,
+                rightIconPerform: {print("gg")},
+                leftIconPerform: {print("gg")},
+                rightIcon: {
+                    Image(systemName: "pencil")
+                }, leftIcon: {
+                    Image(systemName: "pencil")
+                }
+            )
             Input(value: .constant("adfdsa"), label: "Пароль", placeholder: "Введите пароль", required: true, isPassword: true)
             Input(value: .constant(""), label: "Email", placeholder: "Введите email", required: true, error: "Неверный email")
             Input(value: .constant(""), label: "Email", placeholder: "Введите Email", disabled: true)

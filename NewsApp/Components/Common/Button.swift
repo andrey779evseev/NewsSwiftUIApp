@@ -68,8 +68,9 @@ struct UiButton<LeftIcon: View>: View {
         RoundedRectangle(cornerRadius: 6)
     }
     
+    @ViewBuilder
     var body: some View {
-        Button {
+        let btn = Button {
             perform()
         } label: {
             ZStack {
@@ -94,8 +95,14 @@ struct UiButton<LeftIcon: View>: View {
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .center)
+                .padding(.horizontal, 8)
             }
             .frame(height: height)
+        }
+        if size == .small {
+            btn.fixedSize()
+        } else {
+            btn
         }
     }
     

@@ -76,6 +76,8 @@ final class AuthService: ObservableObject {
                 switch error.localizedDescription {
                 case "The email address is already in use by another account.":
                     completion(.alreadyExist)
+                case "The email address is badly formatted.":
+                    completion(.invalidEmailFormat)
                 default:
                     print("an error occurred: " + error.localizedDescription)
                     completion(.unexpected(error: error.localizedDescription))

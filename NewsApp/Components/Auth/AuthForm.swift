@@ -63,6 +63,7 @@ struct AuthForm: View {
         } else {
             auth.signUp(email: email, password: password) { error in
                 if let error = error {
+                    print(error)
                     self.error = error
                 }
                 isLoading = false
