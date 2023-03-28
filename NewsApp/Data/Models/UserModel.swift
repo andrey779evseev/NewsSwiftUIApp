@@ -10,7 +10,7 @@ import FirebaseAuth
 import FirebaseFirestoreSwift
 
 
-struct UserModel: Codable {
+struct UserModel: Codable, Identifiable {
     @DocumentID var id: String?
     var email: String
     var name: String

@@ -21,7 +21,8 @@ struct SearchScreen: View {
     @StateObject private var model: FollowViewModel
     @EnvironmentObject var router: Router
     @State private var search = ""
-    @State private var tab: Tabs = .news
+    @State private var tab = "Новости"
+    @State private var profileUser: UserModel? = nil
     
     var body: some View {
         VStack(spacing: 16) {
@@ -44,45 +45,16 @@ struct SearchScreen: View {
             })
             .matchedGeometryEffect(id: "input", in: namespace)
             .onChange(of: search) { value in
-                if tab == .authors {
+                if tab == "Авторы" {
                     withAnimation {
                         model.getSuggestions(value)
                     }
                 }
             }
-            HStack(alignment: .top, spacing: 24) {
-                VStack(spacing: 8) {
-                    Text("Новости")
-                        .poppinsFont(.footnote)
-                        .foregroundColor(tab == .news ? .dark : .body)
-                    if tab == .news {
-                        Rectangle()
-                            .frame(height: 4)
-                            .foregroundColor(.blue)
-                    }
-                }
-                .fixedSize()
-                .onTapGesture {
-                    tab = .news
-                }
-                VStack(spacing: 8) {
-                    Text("Авторы")
-                        .poppinsFont(.footnote)
-                        .foregroundColor(tab == .authors ? .dark : .body)
-                    if tab == .authors {
-                        Rectangle()
-                            .frame(height: 4)
-                            .foregroundColor(.blue)
-                    }
-                }
-                .fixedSize()
-                .onTapGesture {
-                    tab = .authors
-                }
-            }
+            Tabs(items: ["Новости", "Авторы"], tab: $tab)
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 16) {
-                    if tab == .news {
+                    if tab == "Новости" {
                         HorizontalCard()
                         HorizontalCard()
                         HorizontalCard()
@@ -91,24 +63,26 @@ struct SearchScreen: View {
                         HorizontalCard()
                     } else {
                         ForEach(model.suggestions, id: \.uid) { user in
-                            UserCard(user: user, isFollowed: model.following.contains(where: { $0.uid == user.uid })) {
-                                if model.following.contains(where: { $0.uid == user.uid }) {
+                            let isFollowed = model.following.contains(where: { $0.uid == user.uid })
+                            UserCard(user: user, isFollowed: isFollowed) {
+                                if isFollowed {
                                     model.unfollow(user.uid)
                                 } else {
                                     model.follow(user.uid)
                                 }
                             }
+                            .onTapGesture {
+                                profileUser = user
+                            }
+                        }
+                        .sheet(item: $profileUser) { user in
+                            SearchProfileSheet(user: user, isFollowed: model.following.contains(where: { $0.uid == user.uid }))
                         }
                     }
                 }
             }
         }
         .padding(.all, 24)
-    }
-    
-    enum Tabs {
-        case news
-        case authors
     }
 }
 

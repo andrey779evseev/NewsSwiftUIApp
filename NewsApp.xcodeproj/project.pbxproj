@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4904CA0629D30DA2005D1AA3 /* SearchProfileSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4904CA0529D30DA2005D1AA3 /* SearchProfileSheet.swift */; };
+		4904CA0829D32352005D1AA3 /* Tabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4904CA0729D32352005D1AA3 /* Tabs.swift */; };
 		490CE8A729CA2A7B00BD2DCD /* Checkbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 490CE8A629CA2A7B00BD2DCD /* Checkbox.swift */; };
 		4955F6D729CC98AF00DAD480 /* HomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4955F6D629CC98AF00DAD480 /* HomeScreen.swift */; };
 		497C2D7C29C9A97F006BECF2 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 497C2D7B29C9A97F006BECF2 /* Colors.swift */; };
@@ -59,6 +61,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4904CA0529D30DA2005D1AA3 /* SearchProfileSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchProfileSheet.swift; sourceTree = "<group>"; };
+		4904CA0729D32352005D1AA3 /* Tabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tabs.swift; sourceTree = "<group>"; };
 		490CE8A629CA2A7B00BD2DCD /* Checkbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Checkbox.swift; sourceTree = "<group>"; };
 		4955F6D629CC98AF00DAD480 /* HomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreen.swift; sourceTree = "<group>"; };
 		497C2D7B29C9A97F006BECF2 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
@@ -123,6 +127,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4904CA0429D30D5F005D1AA3 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				49B62E1F29D1C87400E22F71 /* SearchScreen.swift */,
+				4904CA0529D30DA2005D1AA3 /* SearchProfileSheet.swift */,
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
 		497C2D7A29C9A96E006BECF2 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -145,13 +158,13 @@
 		497C2D8529C9B3CD006BECF2 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				4904CA0429D30D5F005D1AA3 /* Search */,
 				49B62E1929D1C07100E22F71 /* Home */,
 				49D1AC8829CB1028004A651C /* AccountInitialization */,
 				497C2D8629C9B3F7006BECF2 /* Auth */,
 				49DE5EC829C9BF1C00CAA06A /* NonAuthorizedScreen.swift */,
 				49D1AC8429CB096E004A651C /* SplashScreen.swift */,
 				49D1AC8629CB0F8C004A651C /* AuthorizedScreen.swift */,
-				49B62E1F29D1C87400E22F71 /* SearchScreen.swift */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -263,6 +276,7 @@
 				490CE8A629CA2A7B00BD2DCD /* Checkbox.swift */,
 				49D1ACAF29CBA696004A651C /* Avatar.swift */,
 				49BA6C4529CEEFCB00C24E9F /* RemoteImage.swift */,
+				4904CA0729D32352005D1AA3 /* Tabs.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -415,6 +429,7 @@
 				49D1AC9629CB4118004A651C /* FollowViewModel.swift in Sources */,
 				4955F6D729CC98AF00DAD480 /* HomeScreen.swift in Sources */,
 				49BA6C4D29CF2A6400C24E9F /* HorizontalCard.swift in Sources */,
+				4904CA0629D30DA2005D1AA3 /* SearchProfileSheet.swift in Sources */,
 				497C2D7C29C9A97F006BECF2 /* Colors.swift in Sources */,
 				490CE8A729CA2A7B00BD2DCD /* Checkbox.swift in Sources */,
 				49BA6C4929CF22D300C24E9F /* VerticalCard.swift in Sources */,
@@ -426,6 +441,7 @@
 				49DE5ED929C9DAF400CAA06A /* PoppinsFont.swift in Sources */,
 				49D1AC9F29CB9310004A651C /* UserModel.swift in Sources */,
 				49E3001B29C8E7B20034CE20 /* NewsAppApp.swift in Sources */,
+				4904CA0829D32352005D1AA3 /* Tabs.swift in Sources */,
 				49D1ACB029CBA696004A651C /* Avatar.swift in Sources */,
 				49D1AC8C29CB1269004A651C /* InitializationFirstStep.swift in Sources */,
 				49D1AC8A29CB104E004A651C /* AccountInitialization.swift in Sources */,

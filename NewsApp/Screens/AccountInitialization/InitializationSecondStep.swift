@@ -56,7 +56,7 @@ struct InitializationSecondStep: View {
                             GeometryReader { geometry in
                                 Group {
                                     if let photo = photo {
-                                        Avatar(url: photo.absoluteString, size: .big, type: .circular)
+                                        Avatar(url: photo.absoluteString, size: .large, type: .circular)
                                     } else {
                                         Circle()
                                             .fill(Color.gray20)
