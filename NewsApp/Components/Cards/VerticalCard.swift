@@ -10,7 +10,7 @@ import SwiftUI
 struct VerticalCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            RemoteImage(url:  "https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2372&q=80", width: .max, height: .constant(183))
+            RemoteImage(url:  "https://images.coolhouseplans.com/plans/44207/44207-b600.jpg", width: .max, height: .constant(183))
                 .clipShape(RoundedRectangle(cornerRadius: 6))
                 .padding(.bottom, 8)
             Text("Lorem ipsum lorem ipsum lorem ipsum")

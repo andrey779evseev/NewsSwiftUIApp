@@ -41,25 +41,34 @@ struct AuthorizedScreen: View {
                 case .search:
                     SearchScreen(auth: auth, namespace: namespace)
                         .environmentObject(router)
+                case .bookmarks:
+                    BookmarkScreen()
+                case .profile:
+                    ProfileScreen()
+                        .environmentObject(router)
+                case .settings:
+                    SettingsScreen()
+                        .environmentObject(auth)
+                        .environmentObject(router)
+                        .transition(.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .trailing)))
                 default:
                     VStack{
-                        Text("Дэфолтная страница \(router.route.rawValue)")
-                        Button {
-                            auth.signOut()
-                            router.go(.login)
-                        } label: {
-                            Text("Выйти")
+                        Text("404 Данная страница не найдена: \(router.route.rawValue)")
+                            .poppinsFont(.title)
+                            .foregroundColor(.error)
+                        UiButton(type: .primary, size: .big, text: "На главную") {
+                            router.go(.home)
                         }
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
-                if router.route != .search {                
+                if router.route != .search && router.route != .settings {                
                     NavBar()
                         .environmentObject(router)
                 }
             }
             .onAppear {
-                if router.route != .home && router.route != .bookmarks && router.route != .profile {
+                if router.route == .login || router.route == .registration {
                     router.go(.home)
                 }
             }

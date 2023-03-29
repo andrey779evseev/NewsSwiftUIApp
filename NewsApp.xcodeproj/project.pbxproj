@@ -10,6 +10,9 @@
 		4904CA0629D30DA2005D1AA3 /* SearchProfileSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4904CA0529D30DA2005D1AA3 /* SearchProfileSheet.swift */; };
 		4904CA0829D32352005D1AA3 /* Tabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4904CA0729D32352005D1AA3 /* Tabs.swift */; };
 		490CE8A729CA2A7B00BD2DCD /* Checkbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 490CE8A629CA2A7B00BD2DCD /* Checkbox.swift */; };
+		4927787829D43DC300DDB789 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4927787729D43DC300DDB789 /* UserProfile.swift */; };
+		4927787B29D43F6300DDB789 /* ProfileScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4927787A29D43F6300DDB789 /* ProfileScreen.swift */; };
+		4927787D29D4507700DDB789 /* SettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4927787C29D4507700DDB789 /* SettingsScreen.swift */; };
 		4955F6D729CC98AF00DAD480 /* HomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4955F6D629CC98AF00DAD480 /* HomeScreen.swift */; };
 		497C2D7C29C9A97F006BECF2 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 497C2D7B29C9A97F006BECF2 /* Colors.swift */; };
 		497C2D8129C9B014006BECF2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 497C2D8029C9B014006BECF2 /* GoogleService-Info.plist */; };
@@ -58,12 +61,16 @@
 		49E3001D29C8E7B20034CE20 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E3001C29C8E7B20034CE20 /* ContentView.swift */; };
 		49E3001F29C8E7B40034CE20 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 49E3001E29C8E7B40034CE20 /* Assets.xcassets */; };
 		49E3002229C8E7B40034CE20 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 49E3002129C8E7B40034CE20 /* Preview Assets.xcassets */; };
+		49E3F81229D433BB00A87F69 /* BookmarkScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E3F81129D433BB00A87F69 /* BookmarkScreen.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		4904CA0529D30DA2005D1AA3 /* SearchProfileSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchProfileSheet.swift; sourceTree = "<group>"; };
 		4904CA0729D32352005D1AA3 /* Tabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tabs.swift; sourceTree = "<group>"; };
 		490CE8A629CA2A7B00BD2DCD /* Checkbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Checkbox.swift; sourceTree = "<group>"; };
+		4927787729D43DC300DDB789 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
+		4927787A29D43F6300DDB789 /* ProfileScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileScreen.swift; sourceTree = "<group>"; };
+		4927787C29D4507700DDB789 /* SettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreen.swift; sourceTree = "<group>"; };
 		4955F6D629CC98AF00DAD480 /* HomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreen.swift; sourceTree = "<group>"; };
 		497C2D7B29C9A97F006BECF2 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		497C2D8029C9B014006BECF2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -109,6 +116,7 @@
 		49E3001C29C8E7B20034CE20 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		49E3001E29C8E7B40034CE20 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		49E3002129C8E7B40034CE20 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		49E3F81129D433BB00A87F69 /* BookmarkScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkScreen.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,6 +144,14 @@
 			path = Search;
 			sourceTree = "<group>";
 		};
+		4927787929D43ED900DDB789 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				4927787A29D43F6300DDB789 /* ProfileScreen.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
 		497C2D7A29C9A96E006BECF2 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -158,6 +174,7 @@
 		497C2D8529C9B3CD006BECF2 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				4927787929D43ED900DDB789 /* Profile */,
 				4904CA0429D30D5F005D1AA3 /* Search */,
 				49B62E1929D1C07100E22F71 /* Home */,
 				49D1AC8829CB1028004A651C /* AccountInitialization */,
@@ -165,6 +182,8 @@
 				49DE5EC829C9BF1C00CAA06A /* NonAuthorizedScreen.swift */,
 				49D1AC8429CB096E004A651C /* SplashScreen.swift */,
 				49D1AC8629CB0F8C004A651C /* AuthorizedScreen.swift */,
+				49E3F81129D433BB00A87F69 /* BookmarkScreen.swift */,
+				4927787C29D4507700DDB789 /* SettingsScreen.swift */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -264,6 +283,7 @@
 				49DE5EE129C9F4B200CAA06A /* Common */,
 				49BA6C4E29CF2C2F00C24E9F /* NavBar.swift */,
 				49B62E1729D1B90500E22F71 /* NavigationTitle.swift */,
+				4927787729D43DC300DDB789 /* UserProfile.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -420,6 +440,7 @@
 			files = (
 				49D1AC8729CB0F8C004A651C /* AuthorizedScreen.swift in Sources */,
 				49B62E2029D1C87400E22F71 /* SearchScreen.swift in Sources */,
+				4927787829D43DC300DDB789 /* UserProfile.swift in Sources */,
 				49D1AC8529CB096E004A651C /* SplashScreen.swift in Sources */,
 				49BA6C4F29CF2C2F00C24E9F /* NavBar.swift in Sources */,
 				49DE5EDC29C9DFE700CAA06A /* Input.swift in Sources */,
@@ -428,6 +449,7 @@
 				49E3001D29C8E7B20034CE20 /* ContentView.swift in Sources */,
 				49D1AC9629CB4118004A651C /* FollowViewModel.swift in Sources */,
 				4955F6D729CC98AF00DAD480 /* HomeScreen.swift in Sources */,
+				49E3F81229D433BB00A87F69 /* BookmarkScreen.swift in Sources */,
 				49BA6C4D29CF2A6400C24E9F /* HorizontalCard.swift in Sources */,
 				4904CA0629D30DA2005D1AA3 /* SearchProfileSheet.swift in Sources */,
 				497C2D7C29C9A97F006BECF2 /* Colors.swift in Sources */,
@@ -445,6 +467,7 @@
 				49D1ACB029CBA696004A651C /* Avatar.swift in Sources */,
 				49D1AC8C29CB1269004A651C /* InitializationFirstStep.swift in Sources */,
 				49D1AC8A29CB104E004A651C /* AccountInitialization.swift in Sources */,
+				4927787B29D43F6300DDB789 /* ProfileScreen.swift in Sources */,
 				49BA6C4B29CF298C00C24E9F /* CardInfo.swift in Sources */,
 				49DE5EE029C9E66E00CAA06A /* Button.swift in Sources */,
 				49D1AC8E29CB1280004A651C /* InitializationSecondStep.swift in Sources */,
@@ -455,6 +478,7 @@
 				49B62E1D29D1C0A500E22F71 /* LatestScreen.swift in Sources */,
 				49DE5ECB29C9C01D00CAA06A /* RegistrationScreen.swift in Sources */,
 				49D1ACA129CB9331004A651C /* FollowModel.swift in Sources */,
+				4927787D29D4507700DDB789 /* SettingsScreen.swift in Sources */,
 				49DE5EE429C9F4F600CAA06A /* AuthForm.swift in Sources */,
 				49B62E1629D0AADD00E22F71 /* NotificationCard.swift in Sources */,
 				497C2D8829C9B405006BECF2 /* LoginScreen.swift in Sources */,

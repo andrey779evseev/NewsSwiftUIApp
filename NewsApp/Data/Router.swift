@@ -37,5 +37,8 @@ final class Router: ObservableObject {
         
         // MARK: profile
         case profile
+        
+        // MARK: settings
+        case settings
     }
 }
