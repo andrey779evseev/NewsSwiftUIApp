@@ -38,7 +38,7 @@ struct UserModel: Codable, Identifiable {
         self.id = id
     }
     
-    mutating func initialize (
+    mutating func update (
         nickname: String,
         name: String,
         about: String,

@@ -24,14 +24,14 @@ struct SettingsScreen: View {
         VStack(spacing: 48) {
             HStack {
                 Image(systemName: "arrow.backward")
-                    .font(.system(size: 24))
+                    .font(.system(size: 20))
                     .foregroundColor(.dark)
                     .onTapGesture {
                         router.go(.profile)
                     }
                 Spacer()
                 Text("Настройки")
-                    .poppinsFont(.subheadline)
+                    .poppinsFont(.footnote)
                     .foregroundColor(.dark)
                 Spacer()
                 Text("\t")

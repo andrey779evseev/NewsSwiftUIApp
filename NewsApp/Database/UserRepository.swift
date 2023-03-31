@@ -88,7 +88,7 @@ struct UserRepository {
     }
     
     public static func getFollowing (_ id: String, completion: @escaping (_ following: [FollowModel]) -> Void) {
-        db.collection("users").document(id).collection("followers")
+        db.collection("users").document(id).collection("following")
             .getDocuments() { (querySnapshot, err) in
                 if let err = err {
                     print("Error getting documents: \(err)")

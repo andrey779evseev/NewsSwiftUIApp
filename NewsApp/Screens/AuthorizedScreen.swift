@@ -46,6 +46,7 @@ struct AuthorizedScreen: View {
                 case .profile:
                     ProfileScreen()
                         .environmentObject(router)
+                        .environmentObject(auth)
                 case .settings:
                     SettingsScreen()
                         .environmentObject(auth)

@@ -14,24 +14,13 @@ struct InitializationSecondStep: View {
     @EnvironmentObject var router: Router
     var back: () -> Void
     
+    @State private var isLoading = false
+    @State private var error: EditProfile.Error = .none
     @State private var nickname = ""
     @State private var name = ""
     @State private var about = ""
     @State private var site = ""
     @State private var photo: URL? = nil
-    @State private var isUploadingImage = false
-    @State private var isLoading = false
-    @State private var error: Error = .none
-    @State private var selectedItem: PhotosPickerItem? = nil
-    
-    func loadImage(_ data: Data) {
-        FirebaseStorage.uploadAvatar(data, with: auth.user!.uid) { url in
-            if let url = url {
-                photo = url
-                isUploadingImage = false
-            }
-        }
-    }
     
     var body: some View {
         VStack(spacing: 0) {
@@ -48,87 +37,8 @@ struct InitializationSecondStep: View {
                         .foregroundColor(.dark)
                     Spacer()
                 }
-                HStack {
-                    PhotosPicker(
-                        selection: $selectedItem,
-                        matching: .images,
-                        photoLibrary: .shared()) {
-                            GeometryReader { geometry in
-                                Group {
-                                    if let photo = photo {
-                                        Avatar(url: photo.absoluteString, size: .large, type: .circular)
-                                    } else {
-                                        Circle()
-                                            .fill(Color.gray20)
-                                            .frame(width: 140, height: 140)
-                                            .overlay(
-                                                Group {
-                                                    if isUploadingImage {
-                                                        ProgressView()
-                                                            .tint(Color.blue)
-                                                            .scaleEffect(2)
-                                                    } else {                 
-                                                        Image(systemName: "plus")
-                                                            .resizable()
-                                                            .frame(width: 30, height: 30)
-                                                    }
-                                                }
-                                            )
-                                    }
-                                }
-                                .frame(width: 140, height: 140)
-                                
-                                Image(systemName: "pencil")
-                                    .resizable()
-                                    .foregroundColor(.white)
-                                    .frame(width: 16, height: 16)
-                                    .background(
-                                        Circle()
-                                            .fill(Color.blue)
-                                            .frame(width: 30, height: 30)
-                                    )
-                                    .position(x: 105, y: 125)
-                            }
-                            .frame(width: 140, height: 140)
-                        }
-                        .onChange(of: selectedItem) { newItem in
-                            isUploadingImage = true
-                            Task {
-                                if let data = try? await newItem?.loadTransferable(type: Data.self) {
-                                    loadImage(data)
-                                }
-                            }
-                        }
-                    
-                }
-                .frame(maxWidth: .infinity, alignment: .center)
-                
-                Input(
-                    value: $nickname,
-                    label: "Имя пользователя",
-                    placeholder: "Введите имя пользователя",
-                    required: true,
-                    autocapitalization: false,
-                    error: error == .nickname ? "Введите имя пользователя" : nil
-                )
-                Input(
-                    value: $name,
-                    label: "Полное имя",
-                    placeholder: "Введите полное имя",
-                    required: true,
-                    error: error == .name ? "Введите полное имя" : nil
-                )
-                Input(
-                    value: $about,
-                    label: "О себе",
-                    placeholder: "Введите краткое описание"
-                )
-                Input(
-                    value: $site,
-                    label: "Сайт",
-                    placeholder: "Введите адрес вашего сайта",
-                    autocapitalization: false
-                )
+                EditProfile(nickname: $nickname, name: $name, about: $about, site: $site, photo: $photo, error: $error)
+                    .environmentObject(auth)
                 
                 Spacer()
             }
@@ -143,7 +53,7 @@ struct InitializationSecondStep: View {
                         error = .name
                         return
                     }
-                    auth.user!.initialize(
+                    auth.user!.update(
                         nickname: nickname,
                         name: name,
                         about: about,
@@ -169,12 +79,6 @@ struct InitializationSecondStep: View {
                 photo = URL(string: auth.user!.photo)
             }
         }
-    }
-    
-    enum Error {
-        case nickname
-        case name
-        case none
     }
 }
 
