@@ -99,10 +99,7 @@ struct InitializationFirstStep: View {
             }
             .padding(.top, 20)
             .padding(.horizontal, 24)
-            .background(Color.white
-                .shadow(color: .black.opacity(0.05), radius: 4, x: 0, y: -2)
-                .mask(Rectangle().padding(.top, -20))
-            )
+            .barShadow()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding(.vertical, 24)

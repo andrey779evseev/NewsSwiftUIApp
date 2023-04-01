@@ -19,7 +19,7 @@ struct HomeScreen: View {
                         .resizable()
                         .frame(width: 30, height: 30)
                     Text("News")
-                        .poppinsFont(.title3)
+                        .poppinsFont(.title3Bold)
                         .foregroundColor(.dark)
                 }
                 Spacer()

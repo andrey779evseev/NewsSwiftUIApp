@@ -51,34 +51,39 @@ struct RemoteImage: View {
             }
         }
     }
-
-    var body: some View {
+    
+    @ViewBuilder
+    var rect: some View {
+        let rect = Rectangle()
+            .foregroundColor(Color.clear)
         switch width {
         case .max:
             switch height {
             case .max:
-                img
+                rect
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .clipShape(Rectangle())
             case .constant(let height):
-                img
-                    .frame(height: height)
+                rect
                     .frame(maxWidth: .infinity)
-                    .clipShape(Rectangle())
+                    .frame(height: height)
             }
         case .constant(let width):
             switch height {
             case .max:
-                img
+                rect
                     .frame(width: width)
                     .frame(maxHeight: .infinity)
-                    .clipShape(Rectangle())
             case .constant(let height):
-                img
+                rect
                     .frame(width: width, height: height)
-                    .clipShape(Rectangle())
             }
         }
+    }
+    
+    var body: some View {
+        rect
+            .overlay(img)
+            .clipShape(Rectangle())
     }
     
     enum RemoteImageWidth {
@@ -96,6 +101,9 @@ struct RemoteImage_Previews: PreviewProvider {
         VStack {
             RemoteImage(url:  "https://unsplash.com/photos/_Qv-KHHj8Vw/download?force=true", width: .constant(200), height: .constant(200))
             RemoteImage(url:  "https://unsplash.com/photos/_Qv-KHHj8Vw/download?force=true", width: .max, height: .constant(200))
+            RemoteImage(url: "https://images.coolhouseplans.com/plans/44207/44207-b600.jpg", width: .max, height: .constant(210))
+//                .clipShape(RoundedRectangle(cornerRadius: 6))
         }
+        .padding()
     }
 }

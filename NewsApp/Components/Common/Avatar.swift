@@ -20,6 +20,8 @@ struct Avatar: View {
             return 100
         case .medium:
             return 70
+        case .average:
+            return 50
         case .small:
             return 20
         }
@@ -42,6 +44,7 @@ struct Avatar: View {
         case large
         case big
         case medium
+        case average
         case small
     }
     enum AvatarType {

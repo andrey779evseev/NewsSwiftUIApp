@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct VerticalCard: View {
+    @State private var isShowPost = false
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             RemoteImage(url:  "https://images.coolhouseplans.com/plans/44207/44207-b600.jpg", width: .max, height: .constant(183))
@@ -21,6 +22,12 @@ struct VerticalCard: View {
                 
         }
         .padding(.all, 8)
+        .onTapGesture {
+            isShowPost = true
+        }
+        .sheet(isPresented: $isShowPost) {
+            PostSheet()
+        }
     }
 }
 

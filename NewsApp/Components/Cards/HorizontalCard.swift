@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct HorizontalCard: View {
+    @State private var isShowPost = false
     var body: some View {
         HStack(spacing: 4) {
             RemoteImage(url: "https://images.coolhouseplans.com/plans/44207/44207-b600.jpg", width: .constant(96), height: .constant(96))
@@ -21,6 +22,12 @@ struct HorizontalCard: View {
             }
         }
         .padding(.all, 8)
+        .onTapGesture {
+            isShowPost = true
+        }
+        .sheet(isPresented: $isShowPost) {
+            PostSheet()
+        }
     }
 }
 

@@ -13,9 +13,9 @@ struct PoppinsFont: ViewModifier {
 
     var name: String {
         switch textStyle {
-        case .largeTitle, .title, .title2, .title3:
+        case .largeTitle, .title, .title2, .title3Bold:
             return "Poppins Bold"
-        case .body, .subheadline, .footnote, .caption, .headline, .callout:
+        case .title3, .body, .subheadline, .footnote, .caption, .headline, .callout:
             return "Poppins Regular"
         case .headlineBold, .subheadlineBold, .footnoteBold, .captionBold, .calloutBold:
             return "Poppins SemiBold"
@@ -30,6 +30,8 @@ struct PoppinsFont: ViewModifier {
             return 32
         case .title2:
             return 28
+        case .title3Bold:
+            return 24
         case .title3:
             return 24
         case .body:
@@ -65,6 +67,8 @@ struct PoppinsFont: ViewModifier {
             return .title
         case .title2:
             return .title2
+        case .title3Bold:
+            return .title3
         case .title3:
             return .title3
         case .body:
@@ -108,6 +112,7 @@ enum TextStyle {
     case title
     case title2
     case title3
+    case title3Bold
     case body
     case headline
     case headlineBold
