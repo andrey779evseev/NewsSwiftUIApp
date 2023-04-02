@@ -15,12 +15,12 @@ struct NonAuthorizedScreen: View {
         switch router.route {
         case .login:
             LoginScreen()
-                .transition(.asymmetric(insertion: .move(edge: .leading), removal: .move(edge: .leading)))
+                .transition(.move(edge: .leading))
                 .environmentObject(router)
                 .environmentObject(auth)
         default:
             RegistrationScreen()
-                .transition(.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .trailing)))
+                .transition(.move(edge: .trailing))
                 .environmentObject(router)
                 .environmentObject(auth)
         }

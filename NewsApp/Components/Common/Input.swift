@@ -151,14 +151,12 @@ struct Input<LeftIcon: View, RightIcon: View>: View {
     }
     
     var hasLeftIcon: Bool {
-//        leftIconPerform != nil
         !(
             leftIcon() is EmptyView
         )
     }
     
     var hasRightIcon: Bool {
-//        rightIconPerform != nil
         !(
             rightIcon() is EmptyView
         )
@@ -175,7 +173,7 @@ struct Input<LeftIcon: View, RightIcon: View>: View {
     
     @ViewBuilder
     var background: some View {
-        let rect = RoundedRectangle(cornerRadius: 10)
+        let rect = RoundedRectangle(cornerRadius: 6)
         
         if disabled {
             ZStack {

@@ -25,19 +25,18 @@ struct AuthorizedScreen: View {
                 case .home:
                     HomeScreen(namespace: namespace)
                         .environmentObject(router)
-//                        .transition(.asymmetric(insertion: .move(edge: .leading), removal: .move(edge: .leading)))
                 case .notifications:
                     NotificationScreen()
                         .environmentObject(router)
-                        .transition(.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .trailing)))
+                        .transition(.move(edge: .trailing))
                 case .popular:
                     PopularScreen()
                         .environmentObject(router)
-                        .transition(.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .trailing)))
+                        .transition(.move(edge: .trailing))
                 case .latest:
                     LatestScreen()
                         .environmentObject(router)
-                        .transition(.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .trailing)))
+                        .transition(.move(edge: .trailing))
                 case .search:
                     SearchScreen(auth: auth, namespace: namespace)
                         .environmentObject(router)
@@ -51,7 +50,7 @@ struct AuthorizedScreen: View {
                     SettingsScreen()
                         .environmentObject(auth)
                         .environmentObject(router)
-                        .transition(.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .trailing)))
+                        .transition(.move(edge: .trailing))
                 default:
                     VStack{
                         Text("404 Данная страница не найдена: \(router.route.rawValue)")

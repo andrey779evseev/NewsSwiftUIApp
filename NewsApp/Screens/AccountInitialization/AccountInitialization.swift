@@ -21,7 +21,7 @@ struct AccountInitialization: View {
                     step = .second
                 }
             }
-                .transition(.asymmetric(insertion: .move(edge: .leading), removal: .move(edge: .leading)))
+                .transition(.move(edge: .leading))
                 .environmentObject(auth)
         case .second:
             InitializationSecondStep() {
@@ -29,7 +29,7 @@ struct AccountInitialization: View {
                     step = .first
                 }
             }
-                .transition(.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .trailing)))
+                .transition(.move(edge: .trailing))
                 .environmentObject(router)
                 .environmentObject(auth)
         }
