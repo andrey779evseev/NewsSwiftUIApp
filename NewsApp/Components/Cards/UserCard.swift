@@ -40,8 +40,8 @@ struct UserCard: View {
 struct UserCard_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            UserCard(user: UserModel(email: "bbc@news.com", name: "BBC News", nickname: "bbcnews", photo: "https://yt3.googleusercontent.com/MRywaef1JLriHf-MUivy7-WAoVAL4sB7VHZXgmprXtmpOlN73I4wBhjjWdkZNFyJNiUP6MHm1w=s900-c-k-c0x00ffffff-no-rj", about: "About bbc news", site: "https://bbc.news", uid: "gg", initialized: true), isFollowed: true, perform: {})
-            UserCard(user: UserModel(email: "bbc@news.com", name: "BBC News", nickname: "bbcnews", photo: "https://yt3.googleusercontent.com/MRywaef1JLriHf-MUivy7-WAoVAL4sB7VHZXgmprXtmpOlN73I4wBhjjWdkZNFyJNiUP6MHm1w=s900-c-k-c0x00ffffff-no-rj", about: "About bbc news", site: "https://bbc.news", uid: "gg", initialized: true), isFollowed: false, perform: {})
+            UserCard(user: TestUserModel, isFollowed: true, perform: {})
+            UserCard(user: TestUserModel, isFollowed: false, perform: {})
 
         }
         .padding()

@@ -99,7 +99,12 @@ struct PoppinsFont: ViewModifier {
     func body(content: Content) -> some View {
         content.font(.custom(name, size: size, relativeTo: relative))
     }
+    
+    func toUIFont() -> UIFont {
+        UIFont(name: name, size: size)!
+    }
 }
+
 
 extension View {
     func poppinsFont(_ textStyle: TextStyle) -> some View {

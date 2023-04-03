@@ -16,4 +16,11 @@ extension View {
                 .mask(Rectangle().padding(.top, -20))
             )
     }
+    
+    func cardShadow() -> some View {
+        self
+            .background(Color.white
+                .shadow(color: .black.opacity(0.08), radius: 10, x: 0, y: 0)
+            )
+    }
 }

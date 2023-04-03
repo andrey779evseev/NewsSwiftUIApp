@@ -99,6 +99,12 @@ final class AuthService: ObservableObject {
         }
     }
     
+    static func forTest() -> AuthService {
+        let auth = AuthService()
+        auth.user = TestUserModel
+        return auth
+    }
+    
     public enum Error {
         case invalidEmailFormat
         case userDoesNotExist

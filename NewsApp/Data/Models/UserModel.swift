@@ -53,3 +53,6 @@ struct UserModel: Codable, Identifiable {
         self.initialized = true
     }
 }
+
+
+let TestUserModel = UserModel(email: "bbc@news.com", name: "BBC News", nickname: "bbcnews", photo: "https://yt3.googleusercontent.com/MRywaef1JLriHf-MUivy7-WAoVAL4sB7VHZXgmprXtmpOlN73I4wBhjjWdkZNFyJNiUP6MHm1w=s900-c-k-c0x00ffffff-no-rj", about: "About bbc news", site: "https://bbc.news.com", uid: "gg", initialized: true)
