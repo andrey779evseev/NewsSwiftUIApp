@@ -42,9 +42,14 @@ struct RemoteImage: View {
                     image
                         .resizable()
                         .scaledToFill()
-                        .transition(.scale(scale: 0.001, anchor: .center))
                 case .failure:
-                    Image(systemName: "wifi.slash")
+                    Rectangle()
+                        .foregroundColor(.gray20)
+                        .overlay(
+                            Image(systemName: "wifi.slash")
+                                .font(.system(size: 20))
+                                .foregroundColor(.error)
+                        )
                 @unknown default:
                     EmptyView()
                 }
@@ -99,10 +104,11 @@ struct RemoteImage: View {
 struct RemoteImage_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            RemoteImage(url:  "https://unsplash.com/photos/_Qv-KHHj8Vw/download?force=true", width: .constant(200), height: .constant(200))
-            RemoteImage(url:  "https://unsplash.com/photos/_Qv-KHHj8Vw/download?force=true", width: .max, height: .constant(200))
-            RemoteImage(url: "https://images.coolhouseplans.com/plans/44207/44207-b600.jpg", width: .max, height: .constant(210))
-//                .clipShape(RoundedRectangle(cornerRadius: 6))
+            //            RemoteImage(url:  "https://unsplash.com/photos/_Qv-KHHj8Vw/download?force=true", width: .constant(200), height: .constant(200))
+            //            RemoteImage(url:  "https://unsplash.com/photos/_Qv-KHHj8Vw/download?force=true", width: .max, height: .constant(200))
+            RemoteImage(url:  "https://images.coolhouseplans.com/plans/44207/44207-b600.jpg", width: .constant(200), height: .constant(200))
+            RemoteImage(url:  "https://images.coolhouseplans.com/plans/44207/44207-b600.jpg", width: .max, height: .constant(200))
+            RemoteImage(url: "https://images.coolhouseplans.com/plans/44207/44207-b600.jpg", width: .max, height: .constant(250))
         }
         .padding()
     }

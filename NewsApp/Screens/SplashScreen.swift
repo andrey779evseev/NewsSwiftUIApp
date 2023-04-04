@@ -22,6 +22,7 @@ struct SplashScreen: View {
                 .multilineTextAlignment(.center)
             Spacer()
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 

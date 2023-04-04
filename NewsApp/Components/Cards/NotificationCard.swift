@@ -14,20 +14,22 @@ struct NotificationCard: View {
         HStack(spacing: 16) {
             Avatar(url: "https://yt3.googleusercontent.com/MRywaef1JLriHf-MUivy7-WAoVAL4sB7VHZXgmprXtmpOlN73I4wBhjjWdkZNFyJNiUP6MHm1w=s900-c-k-c0x00ffffff-no-rj", size: .medium, type: .circular)
             VStack(alignment: .leading, spacing: 4) {
-                switch type {
-                case .post:
-                    Text("**BBC News** опубликовал(-ла) пост “Lorem ipsum lorem ipsum”")
-                        .lineLimit(2)
-                case .follow:
-                    Text("**Modelyn Saris** подписался(-ась) на ваши обновления")
-                        .lineLimit(2)
-                case .comment:
-                    Text("**Omar Merditz** прокоментировал(-ла) вашу публикацию “Minting Your First NFT: A“")
-                        .lineLimit(2)
-                case .like:
-                    Text("**Modelyn Saris** понравилась ваша публикация “Minting Your First NFT: A")
-                        .lineLimit(2)
+                Group {
+                    switch type {
+                    case .post:
+                        Text("**BBC News** опубликовал(-ла) пост “Lorem ipsum lorem ipsum”")
+                    case .follow:
+                        Text("**Modelyn Saris** подписался(-ась) на ваши обновления")
+                    case .comment:
+                        Text("**Omar Merditz** прокоментировал(-ла) вашу публикацию “Minting Your First NFT: A“")
+                    case .like:
+                        Text("**Modelyn Saris** понравилась ваша публикация “Minting Your First NFT: A")
+                    }
                 }
+                .poppinsFont(.footnote)
+                .lineLimit(2)
+                .foregroundColor(.dark)
+                
                 Text("15м назад")
                     .poppinsFont(.callout)
                     .foregroundColor(.body)

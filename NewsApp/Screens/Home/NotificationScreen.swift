@@ -20,6 +20,7 @@ struct NotificationScreen: View {
                 VStack(alignment: .leading) {
                     Text("Сегодня, Апрель 22")
                         .poppinsFont(.footnoteBold)
+                        .foregroundColor(.dark)
                     
                     NotificationCard(type: .post)
                     NotificationCard(type: .follow)

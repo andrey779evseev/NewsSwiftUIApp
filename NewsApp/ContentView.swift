@@ -27,6 +27,7 @@ struct ContentView: View {
                     .environmentObject(auth)
             }
         }
+        .background(Color.white)
         .onAppear {
             auth.listenToAuthState()
         }

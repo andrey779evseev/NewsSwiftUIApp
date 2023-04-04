@@ -20,6 +20,7 @@ struct SearchProfileSheet: View {
             UserProfile(user: user, type: isFollowed ? .followed : .unfollowed) {}
         }
         .padding(.all, 24)
+        .background(Color.white)
     }
 }
 

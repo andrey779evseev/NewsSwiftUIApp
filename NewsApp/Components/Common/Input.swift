@@ -17,6 +17,7 @@ extension Input where LeftIcon == EmptyView {
         isPassword: Bool = false,
         autocapitalization: Bool = true,
         error: String? = nil,
+        enterPerform: (() -> Void)? = nil,
         rightIconPerform: (() -> Void)? = nil,
         leftIconPerform: (() -> Void)? = nil,
         rightIcon: @escaping () -> RightIcon
@@ -30,6 +31,7 @@ extension Input where LeftIcon == EmptyView {
             isPassword: isPassword,
             autocapitalization: autocapitalization,
             error: error,
+            enterPerform: enterPerform,
             rightIconPerform: rightIconPerform,
             leftIconPerform: leftIconPerform,
             rightIcon: rightIcon,
@@ -48,6 +50,7 @@ extension Input where RightIcon == EmptyView {
         isPassword: Bool = false,
         autocapitalization: Bool = true,
         error: String? = nil,
+        enterPerform: (() -> Void)? = nil,
         rightIconPerform: (() -> Void)? = nil,
         leftIconPerform: (() -> Void)? = nil,
         leftIcon: @escaping () -> LeftIcon
@@ -61,6 +64,7 @@ extension Input where RightIcon == EmptyView {
             isPassword: isPassword,
             autocapitalization: autocapitalization,
             error: error,
+            enterPerform: enterPerform,
             rightIconPerform: rightIconPerform,
             leftIconPerform: leftIconPerform,
             rightIcon: {EmptyView()},
@@ -79,6 +83,7 @@ extension Input where RightIcon == EmptyView, LeftIcon == EmptyView {
         isPassword: Bool = false,
         autocapitalization: Bool = true,
         error: String? = nil,
+        enterPerform: (() -> Void)? = nil,
         rightIconPerform: (() -> Void)? = nil,
         leftIconPerform: (() -> Void)? = nil
     ) {
@@ -91,6 +96,7 @@ extension Input where RightIcon == EmptyView, LeftIcon == EmptyView {
             isPassword: isPassword,
             autocapitalization: autocapitalization,
             error: error,
+            enterPerform: enterPerform,
             rightIconPerform: rightIconPerform,
             leftIconPerform: leftIconPerform,
             rightIcon: {EmptyView()},
@@ -111,6 +117,7 @@ struct Input<LeftIcon: View, RightIcon: View>: View {
         isPassword: Bool = false,
         autocapitalization: Bool = true,
         error: String? = nil,
+        enterPerform: (() -> Void)? = nil,
         rightIconPerform: (() -> Void)? = nil,
         leftIconPerform: (() -> Void)? = nil,
         rightIcon: @escaping () -> RightIcon,
@@ -124,6 +131,7 @@ struct Input<LeftIcon: View, RightIcon: View>: View {
         self.isPassword = isPassword
         self.autocapitalization = autocapitalization
         self.error = error
+        self.enterPerform = enterPerform
         self.rightIconPerform = rightIconPerform
         self.leftIconPerform = leftIconPerform
         self.leftIcon = leftIcon
@@ -138,6 +146,7 @@ struct Input<LeftIcon: View, RightIcon: View>: View {
     var isPassword = false
     var autocapitalization = true
     var error: String? = nil
+    var enterPerform: (() -> Void)? = nil
     var rightIconPerform: (() -> Void)? = nil
     var leftIconPerform: (() -> Void)? = nil
     @ViewBuilder var leftIcon: () -> LeftIcon
@@ -165,9 +174,17 @@ struct Input<LeftIcon: View, RightIcon: View>: View {
     @ViewBuilder
     var field: some View {
         if isPassword && isHidden {
-            SecureField("", text: $value)
+            SecureField("", text: $value) {
+                if let perform = enterPerform {
+                    perform()
+                }
+            }
         } else {
-            TextField("", text: $value)
+            TextField("", text: $value) {
+                if let perform = enterPerform {
+                    perform()
+                }
+            }
         }
     }
     
@@ -204,67 +221,86 @@ struct Input<LeftIcon: View, RightIcon: View>: View {
                 .poppinsFont(.caption)
             }
             GeometryReader { geometry in
-                field
-                    .textInputAutocapitalization(!autocapitalization || isPassword ? .never : nil)
-                    .autocorrectionDisabled(isPassword)
-                    .foregroundColor(.dark)
-                    .disabled(disabled)
-                    .focused($isFocused)
-                    .onChange(of: isFocused) { bool in
-                        withAnimation {
-                            isActive = bool
-                        }
-                    }
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 48)
-                    .padding(.leading, hasLeftIcon ? 44 : 10)
-                    .padding(.trailing, 44)
-                    .placeholder(when: value == "") {
-                        Text(placeholder)
-                            .poppinsFont(.caption)
-                            .foregroundColor(.body)
-                            .padding(.leading, hasLeftIcon ? 44 : 10)
-                    }
-                    .background(background)
-                    .overlay(
-                        Group {
-                            if isActive || isPassword || hasRightIcon {
-                                HStack {
-                                    if hasRightIcon {
-                                        rightIcon()
-                                    } else {
-                                        Image(systemName: isPassword ? isHidden ? "eye.slash" : "eye" : "xmark")
-                                            .foregroundColor(isError ? .errorDark : .body)
-                                            .font(.system(.body, weight: .bold))
+                    field
+                        .toolbar {
+                            ToolbarItemGroup(placement: .keyboard) {
+                                if isFocused {
+                                    Spacer()
+                                    Button {
+                                        isFocused = false
+                                    } label: {
+                                        Image(systemName: "chevron.down")
+                                            .font(.system(size: 16))
+                                            .foregroundColor(.primary)
                                     }
-                                }
-                                .frame(width: 40, height: 48, alignment: .center)
-                                .position(x: geometry.size.width - 24, y: 24)
-                                .onTapGesture {
-                                    if hasRightIcon {
-                                        rightIconPerform!()
-                                    } else if isPassword {
-                                        isHidden = !isHidden
-                                    } else {
-                                        value.removeAll()
-                                    }
-                                }
-                                .transition(.opacity)
-                            }
-                            if hasLeftIcon {
-                                HStack {
-                                   leftIcon()
-                                }
-                                .frame(width: 40, height: 48, alignment: .center)
-                                .position(x: 24, y: 24)
-                                .onTapGesture {
-                                    leftIconPerform!()
                                 }
                             }
                         }
-                    )
+                        .textInputAutocapitalization(!autocapitalization || isPassword ? .never : nil)
+                        .autocorrectionDisabled(isPassword)
+                        .foregroundColor(.dark)
+                        .disabled(disabled)
+                        .focused($isFocused)
+                        .onChange(of: isFocused) { bool in
+                            withAnimation {
+                                isActive = bool
+                            }
+                        }
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 48)
+                        .padding(.leading, hasLeftIcon ? 44 : 10)
+                        .padding(.trailing, 44)
+                        .placeholder(when: value == "") {
+                            Text(placeholder)
+                                .poppinsFont(.caption)
+                                .foregroundColor(.body)
+                                .padding(.leading, hasLeftIcon ? 44 : 10)
+                        }
+                        .background(background)
+                        .overlay(
+                            Group {
+                                if isActive || isPassword || hasRightIcon {
+                                    HStack {
+                                        if hasRightIcon {
+                                            rightIcon()
+                                        } else {
+                                            Image(systemName: isPassword ? isHidden ? "eye.slash" : "eye" : "xmark")
+                                                .foregroundColor(isError ? .errorDark : .body)
+                                                .font(.system(.body))
+                                        }
+                                    }
+                                    .frame(width: 40, height: 48, alignment: .center)
+                                    .position(x: geometry.size.width - 24, y: 24)
+                                    .onTapGesture {
+                                        if hasRightIcon {
+                                            rightIconPerform!()
+                                        } else if isPassword {
+                                            isHidden = !isHidden
+                                        } else {
+                                            isFocused = false
+                                            value.removeAll()
+                                        }
+                                    }
+                                    .transition(.opacity)
+                                }
+                                if hasLeftIcon {
+                                    HStack {
+                                        leftIcon()
+                                    }
+                                    .frame(width: 40, height: 48, alignment: .center)
+                                    .position(x: 24, y: 24)
+                                    .onTapGesture {
+                                        leftIconPerform!()
+                                    }
+                                }
+                            }
+                        )
+                        .onTapGesture {
+                            isFocused = true
+                        }
             }
             .frame(height: 48)
+            
             if isError {
                 HStack(spacing: 4) {
                     Image(systemName: "exclamationmark.circle")

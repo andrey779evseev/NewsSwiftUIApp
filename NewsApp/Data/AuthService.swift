@@ -53,7 +53,8 @@ final class AuthService: ObservableObject {
                 switch error.localizedDescription {
                 case "The email address is badly formatted.":
                     completion(.invalidEmailFormat)
-                case "There is no user record corresponding to this identifier. The user may have been deleted.":
+                case "There is no user record corresponding to this identifier. The user may have been deleted.",
+                "The password is invalid or the user does not have a password.":
                     completion(.userDoesNotExist)
                 default:
                     print("an error occurred: " + error.localizedDescription)

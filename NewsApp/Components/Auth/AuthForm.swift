@@ -120,7 +120,6 @@ struct AuthForm: View {
                     .padding(.leading, 4)
             }
             .padding(.bottom, 64)
-            
             Input(
                 value: $email,
                 label: "Email",
@@ -137,8 +136,10 @@ struct AuthForm: View {
                 placeholder: "Введите ваш пароль",
                 required: true,
                 isPassword: true,
-                error: passwordError
+                error: passwordError,
+                enterPerform: login
             )
+            
             
             Checkbox(value: $rememberMe, label: "Запомнить меня")
             .padding(.vertical, 16)

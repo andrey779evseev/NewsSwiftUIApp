@@ -11,17 +11,43 @@ import SwiftUI
 
 struct Editor: View {
     @State private var text = ""
+    @FocusState private var isFocused: Bool
+    
     var body: some View {
         ZStack(alignment: .bottomLeading) {
             VStack {
                 ZStack(alignment: .topLeading) {
                     TextEditor(text: $text)
-                    Text("Добавить Новость/Статью")
-                        .poppinsFont(.footnote)
-                        .foregroundColor(.placeholder)
+                        .foregroundColor(.body)
+                        .scrollContentBackground(.hidden)
+                        .focused($isFocused)
+                        .toolbar {
+                            ToolbarItemGroup(placement: .keyboard) {
+                                if isFocused {
+                                    Spacer()
+                                    Button {
+                                        isFocused = false
+                                    } label: {
+                                        Image(systemName: "chevron.down")
+                                            .font(.system(size: 16))
+                                            .foregroundColor(.primary)
+                                    }
+                                }
+                            }
+                        }
+                        .offset(x: -4, y: -8)
+                    if text.isEmpty {
+                        Text("Добавить Новость/Статью")
+                            .poppinsFont(.footnote)
+                            .foregroundColor(.placeholder)
+                            .onTapGesture {
+                                isFocused = true
+                            }
+                    }
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .padding(.bottom, 40)
             HStack(spacing: 16) {
                 Group {
                     Image(systemName: "bold")
@@ -40,11 +66,13 @@ struct Editor: View {
             .cardShadow()
             .padding([.leading, .bottom], 8)
         }
+        .background(Color.white)
     }
 }
 
 struct Editor_Previews: PreviewProvider {
     static var previews: some View {
         Editor()
+            .padding()
     }
 }

@@ -10,7 +10,7 @@ import SwiftUI
 struct HomeScreen: View {
     var namespace: Namespace.ID
     @EnvironmentObject var router: Router
-    @State private var search = ""
+    
     var body: some View {
         VStack(spacing: 16) {
             HStack {
@@ -29,8 +29,8 @@ struct HomeScreen: View {
                     .shadow(color: .dark.opacity(0.15), radius: 10)
                     .overlay(
                         Image(systemName: "bell")
-                            .resizable()
-                            .frame(width: 18, height: 21.5)
+                            .font(.system(size: 20))
+                            .foregroundColor(.dark)
                     )
                     .onTapGesture {
                         router.go(.notifications)
@@ -38,24 +38,31 @@ struct HomeScreen: View {
             }
             .padding(.bottom, 26)
             
-            Input(
-                value: $search,
-                placeholder: "Поиск",
-                rightIconPerform: {},
-                leftIconPerform: {},
-                rightIcon: {
-                Image(systemName: "slider.horizontal.3")
-                        .font(.system(size: 20))
-                        .foregroundColor(.body)
-            }, leftIcon: {
+            HStack(spacing: 0) {
                 Image(systemName: "magnifyingglass")
                     .font(.system(size: 20))
                     .foregroundColor(.body)
-            })
+                    .padding(.trailing, 10)
+                
+                Text("Поиск")
+                    .poppinsFont(.caption)
+                    .foregroundColor(.placeholder)
+                
+                Spacer()
+                
+                Image(systemName: "slider.horizontal.3")
+                    .font(.system(size: 20))
+                    .foregroundColor(.body)
+            }
+            .padding(.vertical, 12)
+            .padding(.horizontal, 10)
+            .background(Color.white)
+            .overlay(RoundedRectangle(cornerRadius: 6).stroke(Color.body))
             .onTapGesture {
                 router.go(.search)
             }
             .matchedGeometryEffect(id: "input", in: namespace)
+            
             
             
             ScrollView(showsIndicators: false) {

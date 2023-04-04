@@ -64,6 +64,7 @@ struct EditProfileSheet: View {
             Spacer()
         }
         .padding(.all, 24)
+        .background(Color.white)
         .onAppear {
             nickname = auth.user!.nickname
             name = auth.user!.name
