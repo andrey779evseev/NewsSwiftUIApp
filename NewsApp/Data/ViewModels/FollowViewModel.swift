@@ -14,10 +14,10 @@ final class FollowViewModel: ObservableObject {
     init (userId: String, uid: String) {
         self.userId = userId
         self.uid = uid
-        UserRepository.getFollowers(userId) {followers in
+        FollowRepository.getFollowers(userId) {followers in
             self.followers = followers
         }
-        UserRepository.getFollowing(userId) {following in
+        FollowRepository.getFollowing(userId) {following in
             self.following = following
         }
         getSuggestions("")
@@ -35,7 +35,7 @@ final class FollowViewModel: ObservableObject {
     }
     
     public func follow (_ uid: String) {
-        let model = UserRepository.follow(uid, with: self.userId, by: self.uid)
+        let model = FollowRepository.follow(uid, with: self.userId, by: self.uid)
         if let model = model {
             withAnimation {
                 following.append(model)
@@ -45,7 +45,7 @@ final class FollowViewModel: ObservableObject {
     
     public func unfollow (_ uid: String) {
         if let model = following.first(where: { $0.uid == uid }) {
-            UserRepository.unfollow(model.id!, with: self.userId, by: self.uid)
+            FollowRepository.unfollow(model.id!, with: self.userId, by: self.uid)
             withAnimation {
                 following = following.filter {$0.uid != uid}
             }

@@ -33,6 +33,7 @@ struct ProfileScreen: View {
                 UserProfile(user: auth.user!, type: .own) {
                     isEdit = true
                 }
+                .environmentObject(auth)
                 .sheet(isPresented: $isEdit) {
                     EditProfileSheet()
                         .environmentObject(auth)

@@ -8,11 +8,14 @@
 import SwiftUI
 
 struct UserProfile: View {
+    @EnvironmentObject var auth: AuthService
     var user: UserModel
     var type: UserType
     var perform: () -> Void
     
     @State private var tab = "Популярные"
+    @State private var isFollowersSheet = false
+    @State private var isFollowingsSheet = false
     
     var buttonText: String {
         switch type {
@@ -38,6 +41,15 @@ struct UserProfile: View {
                         .poppinsFont(.caption)
                         .foregroundColor(.body)
                 }
+                .onTapGesture {
+                    if type == .own {
+                        isFollowersSheet = true
+                    }
+                }
+                .sheet(isPresented: $isFollowersSheet) {
+                    FollowersFollowingSheet(isFollowers: true)
+                        .environmentObject(auth)
+                }
                 Spacer()
                 VStack(spacing: 0) {
                     Text("1.3M")
@@ -46,6 +58,15 @@ struct UserProfile: View {
                     Text("Подпиcки")
                         .poppinsFont(.caption)
                         .foregroundColor(.body)
+                }
+                .onTapGesture {
+                    if type == .own {
+                        isFollowingsSheet = true
+                    }
+                }
+                .sheet(isPresented: $isFollowingsSheet) {
+                    FollowersFollowingSheet(isFollowers: false)
+                        .environmentObject(auth)
                 }
                 Spacer()
                 VStack(spacing: 0) {

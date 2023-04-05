@@ -103,6 +103,7 @@ final class AuthService: ObservableObject {
     static func forTest() -> AuthService {
         let auth = AuthService()
         auth.user = TestUserModel
+        auth.user?.setId("5HLX7eBb7EehowD2g4Sv")
         return auth
     }
     

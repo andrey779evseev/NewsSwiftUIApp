@@ -69,6 +69,8 @@
 		49E3001F29C8E7B40034CE20 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 49E3001E29C8E7B40034CE20 /* Assets.xcassets */; };
 		49E3002229C8E7B40034CE20 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 49E3002129C8E7B40034CE20 /* Preview Assets.xcassets */; };
 		49E3F81229D433BB00A87F69 /* BookmarkScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E3F81129D433BB00A87F69 /* BookmarkScreen.swift */; };
+		49E620D729DDE7C0004BB0D9 /* FollowersFollowingSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E620D629DDE7C0004BB0D9 /* FollowersFollowingSheet.swift */; };
+		49E620D929DDECF0004BB0D9 /* FollowRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E620D829DDECF0004BB0D9 /* FollowRepository.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -131,6 +133,8 @@
 		49E3001E29C8E7B40034CE20 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		49E3002129C8E7B40034CE20 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		49E3F81129D433BB00A87F69 /* BookmarkScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkScreen.swift; sourceTree = "<group>"; };
+		49E620D629DDE7C0004BB0D9 /* FollowersFollowingSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowersFollowingSheet.swift; sourceTree = "<group>"; };
+		49E620D829DDECF0004BB0D9 /* FollowRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowRepository.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,6 +168,7 @@
 				4927787A29D43F6300DDB789 /* ProfileScreen.swift */,
 				499C0B1329D70E4500C70388 /* EditProfileSheet.swift */,
 				495E757629DAC5B10026AE2F /* AddPostSheet.swift */,
+				49E620D629DDE7C0004BB0D9 /* FollowersFollowingSheet.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -252,6 +257,7 @@
 			children = (
 				49D1AC9229CB37E5004A651C /* UserRepository.swift */,
 				49D1ACAD29CB9A8D004A651C /* Storage.swift */,
+				49E620D829DDECF0004BB0D9 /* FollowRepository.swift */,
 			);
 			path = Database;
 			sourceTree = "<group>";
@@ -490,6 +496,7 @@
 				49DE5ED929C9DAF400CAA06A /* PoppinsFont.swift in Sources */,
 				49D1AC9F29CB9310004A651C /* UserModel.swift in Sources */,
 				49E3001B29C8E7B20034CE20 /* NewsAppApp.swift in Sources */,
+				49E620D729DDE7C0004BB0D9 /* FollowersFollowingSheet.swift in Sources */,
 				4904CA0829D32352005D1AA3 /* Tabs.swift in Sources */,
 				49D1ACB029CBA696004A651C /* Avatar.swift in Sources */,
 				49D1AC8C29CB1269004A651C /* InitializationFirstStep.swift in Sources */,
@@ -497,6 +504,7 @@
 				4927787B29D43F6300DDB789 /* ProfileScreen.swift in Sources */,
 				49BA6C4B29CF298C00C24E9F /* CardInfo.swift in Sources */,
 				49DE5EE029C9E66E00CAA06A /* Button.swift in Sources */,
+				49E620D929DDECF0004BB0D9 /* FollowRepository.swift in Sources */,
 				49D1AC8E29CB1280004A651C /* InitializationSecondStep.swift in Sources */,
 				49DE5EC729C9BE5300CAA06A /* Router.swift in Sources */,
 				49DE5EDE29C9E0A800CAA06A /* Placeholder.swift in Sources */,

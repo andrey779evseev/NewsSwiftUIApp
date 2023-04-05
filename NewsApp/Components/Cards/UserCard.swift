@@ -10,6 +10,7 @@ import SwiftUI
 struct UserCard: View {
     var user: UserModel
     var isFollowed: Bool
+    var hideButton = false
     var perform: () -> Void
     var body: some View {
         HStack(spacing: 0) {
@@ -24,14 +25,16 @@ struct UserCard: View {
                     .foregroundColor(.body)
             }
             Spacer()
-            if isFollowed {
-                UiButton(type: .primary, size: .small, text: "Отписаться", perform: perform
-                )
-            } else {
-                UiButton(type: .outline, size: .small, text: "Подписаться", perform: perform, leftIcon: {
-                    Image(systemName: "plus")
-                        .font(.system(size: 20))
-                    .foregroundColor(.blue)})
+            if !hideButton {
+                if isFollowed {
+                    UiButton(type: .primary, size: .small, text: "Отписаться", perform: perform
+                    )
+                } else {
+                    UiButton(type: .outline, size: .small, text: "Подписаться", perform: perform, leftIcon: {
+                        Image(systemName: "plus")
+                            .font(.system(size: 20))
+                        .foregroundColor(.blue)})
+                }
             }
         }
     }
@@ -42,7 +45,7 @@ struct UserCard_Previews: PreviewProvider {
         VStack {
             UserCard(user: TestUserModel, isFollowed: true, perform: {})
             UserCard(user: TestUserModel, isFollowed: false, perform: {})
-
+            
         }
         .padding()
     }
