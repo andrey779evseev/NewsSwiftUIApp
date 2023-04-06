@@ -139,4 +139,31 @@ struct FollowRepository {
         }
     }
     
+    public static func getFollowed(_ uid: String, by: String, completion: @escaping (_ followed: FollowModel?) -> Void) {
+        db.collection("users").document(by).collection("following").whereField("uid", isEqualTo: uid).getDocuments { snapshot, error in
+            if let error = error {
+                print("Error while getting is followed \(error.localizedDescription)")
+            }
+            if let document = snapshot?.documents.first {
+                do {
+                    let doc = try document.data(as: FollowModel.self)
+                    completion(doc)
+                }
+                catch {
+                    print(error)
+                    completion(nil)
+                }
+            } else {
+                completion(nil)
+            }
+        }
+    }
+    
+    public static func getFollowed(_ uid: String, by: String) async -> FollowModel? {
+        await withCheckedContinuation { continuation in
+            getFollowed(uid, by: by) { followed in
+                continuation.resume(returning: followed)
+            }
+        }
+    }
 }

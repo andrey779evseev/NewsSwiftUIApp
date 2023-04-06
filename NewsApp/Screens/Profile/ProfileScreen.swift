@@ -13,7 +13,12 @@ struct ProfileScreen: View {
     @State private var isEdit = false
     @State private var isCreatePostSheet = false
     
+    
+    
     var body: some View {
+        let userProfile = UserProfile(user: auth.user!, type: .own, auth: auth) {
+            isEdit = true
+        }
         ZStack(alignment: .bottomTrailing) {
             VStack(spacing: 16) {
                 HStack {
@@ -30,14 +35,11 @@ struct ProfileScreen: View {
                             router.go(.settings)
                         }
                 }
-                UserProfile(user: auth.user!, type: .own) {
-                    isEdit = true
-                }
-                .environmentObject(auth)
-                .sheet(isPresented: $isEdit) {
-                    EditProfileSheet()
-                        .environmentObject(auth)
-                }
+                userProfile
+            }
+            .sheet(isPresented: $isEdit) {
+                EditProfileSheet()
+                    .environmentObject(auth)
             }
             
             Circle()
@@ -52,9 +54,19 @@ struct ProfileScreen: View {
                 .onTapGesture {
                     isCreatePostSheet = true
                 }
-                .sheet(isPresented: $isCreatePostSheet) {
+                .sheet(isPresented: $isCreatePostSheet, onDismiss: {
+                    Task {
+                        await userProfile.getPosts()
+                    }
+                }) {
                     AddPostSheet()
+                        .environmentObject(auth)
                 }
+        }
+        .refreshable {
+            Task {
+                await userProfile.getPosts()
+            }
         }
         .padding([.top, .leading, .trailing], 24)
     }

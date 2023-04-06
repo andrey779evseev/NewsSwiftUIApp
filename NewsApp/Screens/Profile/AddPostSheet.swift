@@ -9,12 +9,37 @@ import SwiftUI
 import PhotosUI
 
 struct AddPostSheet: View {
+    @EnvironmentObject var auth: AuthService
     @Environment(\.dismiss) var dismiss
     
     @State private var selectedImage: PhotosPickerItem?
-    @State private var image: Image?
+    @State private var image: String?
     
     @State private var name = ""
+    @State private var text = ""
+    @State private var isUploadingImage = false
+    @State private var isLoading = false
+    
+    func loadImage(_ data: Data) {
+        FirebaseStorage.uploadImage(data, with: auth.user!.uid, at: .posts) { url in
+            if let url = url {
+                image = url.absoluteString
+                isUploadingImage = false
+            }
+        }
+    }
+    
+    func publish () {
+        guard !isUploadingImage && image != nil else {return}
+        
+        let model = PostModel(image: image!, title: name, text: text, userUid: auth.user!.uid)
+        Task {
+            isLoading = true
+            await PostRepository.createPost(model)
+            isLoading = false
+            dismiss()
+        }
+    }
     
     var body: some View {
         VStack(spacing: 0) {
@@ -43,11 +68,7 @@ struct AddPostSheet: View {
                         matching: .images,
                         photoLibrary: .shared()) {
                             if let image = image {
-                                image
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(maxWidth: .infinity)
-                                    .frame(height: 184)
+                                RemoteImage(url: image, width: .max, height: .constant(184))
                                     .clipShape(RoundedRectangle(cornerRadius: 6))
                             } else {
                                 ZStack {
@@ -56,32 +77,38 @@ struct AddPostSheet: View {
                                     rect
                                         .strokeBorder(style: StrokeStyle(dash: [10], dashPhase: 10))
                                         .foregroundColor(.body)
-                                    VStack(spacing: 8) {
-                                        Image(systemName: "plus")
-                                            .font(.system(size: 20))
-                                            .foregroundColor(.body)
-                                        Text("Добавить обложку")
-                                            .poppinsFont(.caption)
-                                            .foregroundColor(.body)
+                                    if isUploadingImage {
+                                        ProgressView()
+                                            .tint(.blue)
+                                            .scaleEffect(3)
+                                    } else {
+                                        VStack(spacing: 8) {
+                                            Image(systemName: "plus")
+                                                .font(.system(size: 20))
+                                                .foregroundColor(.body)
+                                            Text("Добавить обложку")
+                                                .poppinsFont(.caption)
+                                                .foregroundColor(.body)
+                                        }
                                     }
                                 }
                                 .frame(maxWidth: .infinity)
                                 .frame(height: 184)
                             }
                         }
-                        .onChange(of: selectedImage) { _ in
+                        .onChange(of: selectedImage) { newItem in
                             Task {
-                                if let data = try? await selectedImage?.loadTransferable(type: Data.self) {
-                                    if let uiImage = UIImage(data: data) {
-                                        image = Image(uiImage: uiImage)
-                                        return
-                                    }
+                                isUploadingImage = true
+                                if let data = try? await newItem?.loadTransferable(type: Data.self) {
+                                    loadImage(data)
                                 }
                             }
                         }
                     
                     VStack(spacing: 0) {
                         TextField("", text: $name)
+                            .poppinsFont(.title3)
+                            .foregroundColor(.dark)
                             .placeholder(when: name.isEmpty) {
                                 Text("Заголовок новости")
                                     .poppinsFont(.title3)
@@ -91,7 +118,7 @@ struct AddPostSheet: View {
                             .foregroundColor(.gray40)
                             .frame(height: 1)
                     }
-                    Editor()
+                    Editor(text: $text)
                         .frame(height: UIScreen.main.bounds.size.height / 2 - 80)
                 }
                 .padding([.top, .leading, .trailing], 24)
@@ -108,8 +135,8 @@ struct AddPostSheet: View {
                 .font(.system(size: 20))
                 .foregroundColor(.body)
                 
-                UiButton(type: .secondary, size: .big, text: "Опубликовать") {
-                    
+                UiButton(type: .secondary, size: .big, text: "Опубликовать", isLoading: isLoading) {
+                    publish()
                 }
             }
             .frame(height: 78)

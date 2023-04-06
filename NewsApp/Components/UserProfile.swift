@@ -8,14 +8,16 @@
 import SwiftUI
 
 struct UserProfile: View {
-    @EnvironmentObject var auth: AuthService
     var user: UserModel
     var type: UserType
+    @ObservedObject var auth: AuthService
     var perform: () -> Void
     
+    @State private var posts: [ExtendedPostModel] = []
     @State private var tab = "Популярные"
     @State private var isFollowersSheet = false
     @State private var isFollowingsSheet = false
+    @State private var isLoading = false
     
     var buttonText: String {
         switch type {
@@ -28,10 +30,22 @@ struct UserProfile: View {
         }
     }
     
+    func getPosts () async {
+        isLoading = true
+        let sort: PostRepository.GetPostsSorting
+        if tab == "Популярные" {
+            sort = .popularity
+        } else {
+            sort = .time
+        }
+        self.posts = await PostRepository.getPosts(by: user.uid, sort: sort)
+        isLoading = false
+    }
+    
     var body: some View {
         ScrollView(showsIndicators: false) {
             HStack {
-                Avatar(url: "https://yt3.googleusercontent.com/MRywaef1JLriHf-MUivy7-WAoVAL4sB7VHZXgmprXtmpOlN73I4wBhjjWdkZNFyJNiUP6MHm1w=s900-c-k-c0x00ffffff-no-rj", size: .big, type: .circular)
+                Avatar(url: user.photo, size: .big, type: .circular)
                 Spacer()
                 VStack(spacing: 0) {
                     Text("1.2M")
@@ -47,8 +61,7 @@ struct UserProfile: View {
                     }
                 }
                 .sheet(isPresented: $isFollowersSheet) {
-                    FollowersFollowingSheet(isFollowers: true)
-                        .environmentObject(auth)
+                    FollowersFollowingSheet(isFollowers: true, user: user)
                 }
                 Spacer()
                 VStack(spacing: 0) {
@@ -65,8 +78,7 @@ struct UserProfile: View {
                     }
                 }
                 .sheet(isPresented: $isFollowingsSheet) {
-                    FollowersFollowingSheet(isFollowers: false)
-                        .environmentObject(auth)
+                    FollowersFollowingSheet(isFollowers: false, user: user)
                 }
                 Spacer()
                 VStack(spacing: 0) {
@@ -109,21 +121,25 @@ struct UserProfile: View {
                 }
             }
             Tabs(items: ["Популярные", "Последние"], tab: $tab)
-            if tab == "Популярные" {
-                HorizontalCard()
-                HorizontalCard()
-                HorizontalCard()
-                HorizontalCard()
-                HorizontalCard()
-                HorizontalCard()
+            if isLoading {
+                ProgressView()
+                    .tint(.blue)
+                    .scaleEffect(3)
+                    .padding(.vertical, 80)
+            } else if posts.count > 0 {
+                ForEach(posts) { post in
+                    HorizontalCard(post: post)
+                        .environmentObject(auth)
+                }
             } else {
-                HorizontalCard()
-                HorizontalCard()
-                HorizontalCard()
-                HorizontalCard()
-                HorizontalCard()
-                HorizontalCard()
+                Text("У вас еще нет постов")
+                    .poppinsFont(.title2)
+                    .foregroundColor(.body)
+                    .padding(.vertical, 80)
             }
+        }
+        .task {
+            await getPosts()
         }
     }
     enum UserType {
@@ -135,6 +151,6 @@ struct UserProfile: View {
 
 struct UserProfile_Previews: PreviewProvider {
     static var previews: some View {
-        UserProfile(user: TestUserModel, type: .followed) {}
+        UserProfile(user: TestUserModel, type: .followed, auth: AuthService.forTest()) {}
     }
 }

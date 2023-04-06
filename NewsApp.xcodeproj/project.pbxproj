@@ -10,6 +10,9 @@
 		4904CA0629D30DA2005D1AA3 /* SearchProfileSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4904CA0529D30DA2005D1AA3 /* SearchProfileSheet.swift */; };
 		4904CA0829D32352005D1AA3 /* Tabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4904CA0729D32352005D1AA3 /* Tabs.swift */; };
 		490CE8A729CA2A7B00BD2DCD /* Checkbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 490CE8A629CA2A7B00BD2DCD /* Checkbox.swift */; };
+		491AD02029DEB89A002212BF /* PostRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491AD01F29DEB89A002212BF /* PostRepository.swift */; };
+		491AD02229DEB934002212BF /* PostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491AD02129DEB934002212BF /* PostModel.swift */; };
+		491AD02529DECD65002212BF /* DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491AD02429DECD65002212BF /* DateFormatter.swift */; };
 		4927787829D43DC300DDB789 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4927787729D43DC300DDB789 /* UserProfile.swift */; };
 		4927787B29D43F6300DDB789 /* ProfileScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4927787A29D43F6300DDB789 /* ProfileScreen.swift */; };
 		4927787D29D4507700DDB789 /* SettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4927787C29D4507700DDB789 /* SettingsScreen.swift */; };
@@ -77,6 +80,9 @@
 		4904CA0529D30DA2005D1AA3 /* SearchProfileSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchProfileSheet.swift; sourceTree = "<group>"; };
 		4904CA0729D32352005D1AA3 /* Tabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tabs.swift; sourceTree = "<group>"; };
 		490CE8A629CA2A7B00BD2DCD /* Checkbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Checkbox.swift; sourceTree = "<group>"; };
+		491AD01F29DEB89A002212BF /* PostRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRepository.swift; sourceTree = "<group>"; };
+		491AD02129DEB934002212BF /* PostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostModel.swift; sourceTree = "<group>"; };
+		491AD02429DECD65002212BF /* DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatter.swift; sourceTree = "<group>"; };
 		4927787729D43DC300DDB789 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		4927787A29D43F6300DDB789 /* ProfileScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileScreen.swift; sourceTree = "<group>"; };
 		4927787C29D4507700DDB789 /* SettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreen.swift; sourceTree = "<group>"; };
@@ -160,6 +166,14 @@
 				4904CA0529D30DA2005D1AA3 /* SearchProfileSheet.swift */,
 			);
 			path = Search;
+			sourceTree = "<group>";
+		};
+		491AD02329DECD4C002212BF /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				491AD02429DECD65002212BF /* DateFormatter.swift */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 		4927787929D43ED900DDB789 /* Profile */ = {
@@ -258,6 +272,7 @@
 				49D1AC9229CB37E5004A651C /* UserRepository.swift */,
 				49D1ACAD29CB9A8D004A651C /* Storage.swift */,
 				49E620D829DDECF0004BB0D9 /* FollowRepository.swift */,
+				491AD01F29DEB89A002212BF /* PostRepository.swift */,
 			);
 			path = Database;
 			sourceTree = "<group>";
@@ -275,6 +290,7 @@
 			children = (
 				49D1AC9E29CB9310004A651C /* UserModel.swift */,
 				49D1ACA029CB9331004A651C /* FollowModel.swift */,
+				491AD02129DEB934002212BF /* PostModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -355,6 +371,7 @@
 		49E3001929C8E7B20034CE20 /* NewsApp */ = {
 			isa = PBXGroup;
 			children = (
+				491AD02329DECD4C002212BF /* Utils */,
 				49D1AC9129CB37C9004A651C /* Database */,
 				49DE5EDA29C9DFD200CAA06A /* Components */,
 				49DE5ED729C9DAE200CAA06A /* Modifiers */,
@@ -486,8 +503,10 @@
 				4904CA0629D30DA2005D1AA3 /* SearchProfileSheet.swift in Sources */,
 				497C2D7C29C9A97F006BECF2 /* Colors.swift in Sources */,
 				490CE8A729CA2A7B00BD2DCD /* Checkbox.swift in Sources */,
+				491AD02229DEB934002212BF /* PostModel.swift in Sources */,
 				49BA6C4929CF22D300C24E9F /* VerticalCard.swift in Sources */,
 				495E757929DB01E90026AE2F /* Editor.swift in Sources */,
+				491AD02529DECD65002212BF /* DateFormatter.swift in Sources */,
 				49B62E1829D1B90500E22F71 /* NavigationTitle.swift in Sources */,
 				49BA6C4629CEEFCB00C24E9F /* RemoteImage.swift in Sources */,
 				49B62E2229D1D1D100E22F71 /* UserCard.swift in Sources */,
@@ -508,6 +527,7 @@
 				49D1AC8E29CB1280004A651C /* InitializationSecondStep.swift in Sources */,
 				49DE5EC729C9BE5300CAA06A /* Router.swift in Sources */,
 				49DE5EDE29C9E0A800CAA06A /* Placeholder.swift in Sources */,
+				491AD02029DEB89A002212BF /* PostRepository.swift in Sources */,
 				49B62E1429D09E3E00E22F71 /* NotificationScreen.swift in Sources */,
 				49D1AC9329CB37E5004A651C /* UserRepository.swift in Sources */,
 				49B62E1D29D1C0A500E22F71 /* LatestScreen.swift in Sources */,

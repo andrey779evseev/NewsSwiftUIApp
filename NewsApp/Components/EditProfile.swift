@@ -20,7 +20,7 @@ struct EditProfile: View {
     @State private var selectedItem: PhotosPickerItem? = nil
     
     func loadImage(_ data: Data) {
-        FirebaseStorage.uploadAvatar(data, with: auth.user!.uid) { url in
+        FirebaseStorage.uploadImage(data, with: auth.user!.uid, at: .avatars) { url in
             if let url = url {
                 photo = url
                 isUploadingImage = false

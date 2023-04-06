@@ -17,7 +17,7 @@ struct SearchProfileSheet: View {
             NavigationTitle(text: "") {
                 dismiss()
             }
-            UserProfile(user: user, type: isFollowed ? .followed : .unfollowed) {}
+            UserProfile(user: user, type: isFollowed ? .followed : .unfollowed, auth: AuthService.forTest()) {}
         }
         .padding(.all, 24)
         .background(Color.white)

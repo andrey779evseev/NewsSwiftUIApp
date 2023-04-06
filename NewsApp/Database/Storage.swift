@@ -14,8 +14,15 @@ let storageRef = storage.reference()
 
 
 struct FirebaseStorage {
-    public static func uploadAvatar (_ data: Data, with uid: String, completion: @escaping (_ url: URL?) -> Void) {
-        let filename = "avatars/\(uid)/\(UUID().uuidString).jpg"
+    public static func uploadImage (_ data: Data, with uid: String, at location: UploadLocation, completion: @escaping (_ url: URL?) -> Void) {
+        var path = ""
+        switch location {
+        case .avatars:
+            path = "avatars"
+        case .posts:
+            path = "posts"
+        }
+        let filename = "\(path)/\(uid)/\(UUID().uuidString).jpg"
         let ref = storageRef.child(filename)
         
         let md = StorageMetadata()
@@ -32,5 +39,10 @@ struct FirebaseStorage {
             completion(nil)
         }
             
+    }
+    
+    public enum UploadLocation {
+        case avatars
+        case posts
     }
 }

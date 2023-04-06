@@ -9,7 +9,7 @@ import SwiftUI
 
 struct FollowersFollowingSheet: View {
     var isFollowers: Bool
-    @EnvironmentObject var auth: AuthService
+    var user: UserModel
     @Environment(\.dismiss) var dismiss
     
     @State private var users: [UserModel] = []
@@ -42,15 +42,15 @@ struct FollowersFollowingSheet: View {
             } else {
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 16) {
-                        ForEach(users) { user in
-                            let isFollowed = following.contains {$0.uid == user.uid}
-                            UserCard(user: user, isFollowed: isFollowers && isFollowed, hideButton: !isFollowers) {
+                        ForEach(users) { model in
+                            let isFollowed = following.contains {$0.uid == model.uid}
+                            UserCard(user: model, isFollowed: isFollowers && isFollowed, hideButton: !isFollowers) {
                                 if isFollowed {
-                                    let follow = self.following.first {$0.uid == user.uid}!
-                                    FollowRepository.unfollow(follow.id!, with: auth.user!.id!, by: auth.user!.uid)
-                                    self.following.removeAll {$0.uid == user.uid}
+                                    let follow = self.following.first {$0.uid == model.uid}!
+                                    FollowRepository.unfollow(follow.id!, with: user.id!, by: user.uid)
+                                    self.following.removeAll {$0.uid == model.uid}
                                 } else {
-                                    let model = FollowRepository.follow(user.uid, with: auth.user!.id!, by: auth.user!.uid)
+                                    let model = FollowRepository.follow(model.uid, with: user.id!, by: user.uid)
                                     self.following.append(model!)
                                 }
                             }
@@ -69,11 +69,11 @@ struct FollowersFollowingSheet: View {
         .background(Color.white)
         .task {
             if isFollowers {
-                self.users = await FollowRepository.getFollowersModels(auth.user!.id!)
-                self.following = await FollowRepository.getFollowing(auth.user!.id!)
+                self.users = await FollowRepository.getFollowersModels(user.id!)
+                self.following = await FollowRepository.getFollowing(user.id!)
                 isLoading = false
             } else {
-                self.users = await FollowRepository.getFollowingModels(auth.user!.id!)
+                self.users = await FollowRepository.getFollowingModels(user.id!)
                 isLoading = false
             }
         }
@@ -82,7 +82,6 @@ struct FollowersFollowingSheet: View {
 
 struct FollowersFollowingSheet_Previews: PreviewProvider {
     static var previews: some View {
-        FollowersFollowingSheet(isFollowers: true)
-            .environmentObject(AuthService.forTest())
+        FollowersFollowingSheet(isFollowers: true, user: TestUserModel)
     }
 }

@@ -8,10 +8,22 @@
 import SwiftUI
 
 struct PostSheet: View {
+    @EnvironmentObject var auth: AuthService
+    var post: ExtendedPostModel = TestExtendedPostModel
     @Environment(\.dismiss) var dismiss
     @State private var isCommentsScreen = false
     
     @State private var comment = ""
+    @State private var followed: FollowModel? = nil
+    @State private var isLoadingFollowModel = true
+    
+    var label: String {
+        if let _ = followed {
+            return "Отписаться"
+        } else {
+            return "Подписаться"
+        }
+    }
     
     @ViewBuilder
     var body: some View {
@@ -85,29 +97,37 @@ struct PostSheet: View {
                                 .rotationEffect(.degrees(90))
                         }
                         HStack(spacing: 4) {
-                            Avatar(url: "https://yt3.googleusercontent.com/MRywaef1JLriHf-MUivy7-WAoVAL4sB7VHZXgmprXtmpOlN73I4wBhjjWdkZNFyJNiUP6MHm1w=s900-c-k-c0x00ffffff-no-rj", size: .average, type: .circular)
+                            Avatar(url: post.user.photo, size: .average, type: .circular)
                             VStack(alignment: .leading, spacing: 0) {
-                                Text("BBC News")
+                                Text(post.user.name)
                                     .poppinsFont(.footnoteBold)
                                     .foregroundColor(.dark)
-                                Text("14м назад")
+                                Text(formatDate(post.createdAt))
                                     .poppinsFont(.caption)
                                     .foregroundColor(.body)
                             }
                             Spacer()
-                            UiButton(type: .primary, size: .small, text: "Отписаться") {}
+                            
+                            UiButton(type: .primary, size: .small, text: label, isLoading: isLoadingFollowModel) {
+                                if let followed = followed {
+                                    FollowRepository.unfollow(followed.id!, with: auth.user!.id!, by: auth.user!.uid)
+                                    self.followed = nil
+                                } else {
+                                    self.followed = FollowRepository.follow(post.userUid, with: auth.user!.id!, by: auth.user!.uid)
+                                }
+                            }
                         }
                         
                         ScrollView(showsIndicators: false) {
                             VStack(alignment: .leading, spacing: 16) {
-                                RemoteImage(url: "https://images.coolhouseplans.com/plans/44207/44207-b600.jpg", width: .max, height: .constant(248))
+                                RemoteImage(url: post.image, width: .max, height: .constant(248))
                                     .clipShape(RoundedRectangle(cornerRadius: 6))
                                 
-                                Text("Lorem ipsum lorem y ipsum lorem: lorem ipsum lorem ipsum lorem")
-                                    .poppinsFont(.body)
+                                Text(post.title)
+                                    .poppinsFont(.title3)
                                     .foregroundColor(.dark)
                                 
-                                Text("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.")
+                                Text(post.text)
                                     .poppinsFont(.footnote)
                                     .foregroundColor(.body)
                             }
@@ -147,6 +167,10 @@ struct PostSheet: View {
             }
         }
         .background(Color.white)
+        .task {
+            followed = await FollowRepository.getFollowed(post.userUid, by: auth.user!.id!)
+            isLoadingFollowModel = false
+        }
     }
 }
 

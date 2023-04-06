@@ -10,7 +10,7 @@ import SwiftUI
 
 
 struct Editor: View {
-    @State private var text = ""
+    @Binding var text: String
     @FocusState private var isFocused: Bool
     
     var body: some View {
@@ -72,7 +72,7 @@ struct Editor: View {
 
 struct Editor_Previews: PreviewProvider {
     static var previews: some View {
-        Editor()
+        Editor(text: .constant(""))
             .padding()
     }
 }

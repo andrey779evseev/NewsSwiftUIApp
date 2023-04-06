@@ -8,17 +8,19 @@
 import SwiftUI
 
 struct HorizontalCard: View {
+    @EnvironmentObject var auth: AuthService
+    var post: ExtendedPostModel = TestExtendedPostModel
     @State private var isShowPost = false
     var body: some View {
         HStack(spacing: 4) {
-            RemoteImage(url: "https://images.coolhouseplans.com/plans/44207/44207-b600.jpg", width: .constant(96), height: .constant(96))
+            RemoteImage(url: post.image, width: .constant(96), height: .constant(96))
                 .clipShape(RoundedRectangle(cornerRadius: 6))
-            VStack(spacing: 4) {
-                Text("Lorem impsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum")
+            VStack(alignment: .leading, spacing: 4) {
+                Text(post.title)
                     .lineLimit(2)
                     .poppinsFont(.footnote)
                     .foregroundColor(.dark)
-                CardInfo()
+                CardInfo(user: post.user)
             }
         }
         .padding(.all, 8)
@@ -26,7 +28,8 @@ struct HorizontalCard: View {
             isShowPost = true
         }
         .sheet(isPresented: $isShowPost) {
-            PostSheet()
+            PostSheet(post: post)
+                .environmentObject(auth)
         }
     }
 }

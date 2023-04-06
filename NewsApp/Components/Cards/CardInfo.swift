@@ -8,11 +8,13 @@
 import SwiftUI
 
 struct CardInfo: View {
+    var user: UserModel = TestUserModel
+    var createdAt: Date = Date.now.addingTimeInterval(-15000)
     var body: some View {
         HStack(spacing: 0) {
-            Avatar(url: "https://yt3.googleusercontent.com/MRywaef1JLriHf-MUivy7-WAoVAL4sB7VHZXgmprXtmpOlN73I4wBhjjWdkZNFyJNiUP6MHm1w=s900-c-k-c0x00ffffff-no-rj", size: .small, type: .circular)
+            Avatar(url: user.photo, size: .small, type: .circular)
                 .padding(.trailing, 4)
-            Text("BBC News")
+            Text(user.name)
                 .poppinsFont(.calloutBold)
                 .foregroundColor(.body)
                 .padding(.trailing, 12)
@@ -20,7 +22,7 @@ struct CardInfo: View {
                 .font(.system(size: 12))
                 .foregroundColor(.body)
                 .padding(.trailing, 4)
-            Text("4ч назад")
+            Text(formatDate(createdAt))
                 .poppinsFont(.callout)
                 .foregroundColor(.body)
             Spacer()
