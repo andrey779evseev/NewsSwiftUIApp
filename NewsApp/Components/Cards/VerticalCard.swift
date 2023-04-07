@@ -26,7 +26,7 @@ struct VerticalCard: View {
             isShowPost = true
         }
         .sheet(isPresented: $isShowPost) {
-            PostSheet()
+//            PostSheet()
         }
     }
 }

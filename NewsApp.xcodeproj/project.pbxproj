@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4900C20E29E00EEC000C4355 /* LikeRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4900C20D29E00EEC000C4355 /* LikeRepository.swift */; };
+		4900C21029E0124A000C4355 /* CommentRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4900C20F29E0124A000C4355 /* CommentRepository.swift */; };
+		4900C21229E01335000C4355 /* Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4900C21129E01335000C4355 /* Int.swift */; };
+		4900C21429E01480000C4355 /* LikeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4900C21329E01480000C4355 /* LikeModel.swift */; };
+		4900C21629E044AA000C4355 /* CommentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4900C21529E044AA000C4355 /* CommentModel.swift */; };
+		4900C21829E04E02000C4355 /* PostCommentSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4900C21729E04E02000C4355 /* PostCommentSheet.swift */; };
 		4904CA0629D30DA2005D1AA3 /* SearchProfileSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4904CA0529D30DA2005D1AA3 /* SearchProfileSheet.swift */; };
 		4904CA0829D32352005D1AA3 /* Tabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4904CA0729D32352005D1AA3 /* Tabs.swift */; };
 		490CE8A729CA2A7B00BD2DCD /* Checkbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 490CE8A629CA2A7B00BD2DCD /* Checkbox.swift */; };
@@ -77,6 +83,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4900C20D29E00EEC000C4355 /* LikeRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeRepository.swift; sourceTree = "<group>"; };
+		4900C20F29E0124A000C4355 /* CommentRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentRepository.swift; sourceTree = "<group>"; };
+		4900C21129E01335000C4355 /* Int.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Int.swift; sourceTree = "<group>"; };
+		4900C21329E01480000C4355 /* LikeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeModel.swift; sourceTree = "<group>"; };
+		4900C21529E044AA000C4355 /* CommentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentModel.swift; sourceTree = "<group>"; };
+		4900C21729E04E02000C4355 /* PostCommentSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCommentSheet.swift; sourceTree = "<group>"; };
 		4904CA0529D30DA2005D1AA3 /* SearchProfileSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchProfileSheet.swift; sourceTree = "<group>"; };
 		4904CA0729D32352005D1AA3 /* Tabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tabs.swift; sourceTree = "<group>"; };
 		490CE8A629CA2A7B00BD2DCD /* Checkbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Checkbox.swift; sourceTree = "<group>"; };
@@ -191,6 +203,7 @@
 			isa = PBXGroup;
 			children = (
 				497C2D7B29C9A97F006BECF2 /* Colors.swift */,
+				4900C21129E01335000C4355 /* Int.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -220,6 +233,7 @@
 				49E3F81129D433BB00A87F69 /* BookmarkScreen.swift */,
 				4927787C29D4507700DDB789 /* SettingsScreen.swift */,
 				493DF1EA29D830B600BDD51D /* PostSheet.swift */,
+				4900C21729E04E02000C4355 /* PostCommentSheet.swift */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -273,6 +287,8 @@
 				49D1ACAD29CB9A8D004A651C /* Storage.swift */,
 				49E620D829DDECF0004BB0D9 /* FollowRepository.swift */,
 				491AD01F29DEB89A002212BF /* PostRepository.swift */,
+				4900C20D29E00EEC000C4355 /* LikeRepository.swift */,
+				4900C20F29E0124A000C4355 /* CommentRepository.swift */,
 			);
 			path = Database;
 			sourceTree = "<group>";
@@ -291,6 +307,8 @@
 				49D1AC9E29CB9310004A651C /* UserModel.swift */,
 				49D1ACA029CB9331004A651C /* FollowModel.swift */,
 				491AD02129DEB934002212BF /* PostModel.swift */,
+				4900C21329E01480000C4355 /* LikeModel.swift */,
+				4900C21529E044AA000C4355 /* CommentModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -482,6 +500,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4900C20E29E00EEC000C4355 /* LikeRepository.swift in Sources */,
 				49D1AC8729CB0F8C004A651C /* AuthorizedScreen.swift in Sources */,
 				49B62E2029D1C87400E22F71 /* SearchScreen.swift in Sources */,
 				4927787829D43DC300DDB789 /* UserProfile.swift in Sources */,
@@ -493,10 +512,12 @@
 				49B62E1B29D1C08D00E22F71 /* PopularScreen.swift in Sources */,
 				499C0B1229D70AA100C70388 /* EditProfile.swift in Sources */,
 				49E3001D29C8E7B20034CE20 /* ContentView.swift in Sources */,
+				4900C21429E01480000C4355 /* LikeModel.swift in Sources */,
 				49D1AC9629CB4118004A651C /* FollowViewModel.swift in Sources */,
 				499C0B1429D70E4500C70388 /* EditProfileSheet.swift in Sources */,
 				493DF1EB29D830B600BDD51D /* PostSheet.swift in Sources */,
 				4955F6D729CC98AF00DAD480 /* HomeScreen.swift in Sources */,
+				4900C21629E044AA000C4355 /* CommentModel.swift in Sources */,
 				495E757729DAC5B10026AE2F /* AddPostSheet.swift in Sources */,
 				49E3F81229D433BB00A87F69 /* BookmarkScreen.swift in Sources */,
 				49BA6C4D29CF2A6400C24E9F /* HorizontalCard.swift in Sources */,
@@ -509,11 +530,13 @@
 				491AD02529DECD65002212BF /* DateFormatter.swift in Sources */,
 				49B62E1829D1B90500E22F71 /* NavigationTitle.swift in Sources */,
 				49BA6C4629CEEFCB00C24E9F /* RemoteImage.swift in Sources */,
+				4900C21229E01335000C4355 /* Int.swift in Sources */,
 				49B62E2229D1D1D100E22F71 /* UserCard.swift in Sources */,
 				49DE5EC929C9BF1C00CAA06A /* NonAuthorizedScreen.swift in Sources */,
 				49D1ACAE29CB9A8D004A651C /* Storage.swift in Sources */,
 				49DE5ED929C9DAF400CAA06A /* PoppinsFont.swift in Sources */,
 				49D1AC9F29CB9310004A651C /* UserModel.swift in Sources */,
+				4900C21029E0124A000C4355 /* CommentRepository.swift in Sources */,
 				49E3001B29C8E7B20034CE20 /* NewsAppApp.swift in Sources */,
 				49E620D729DDE7C0004BB0D9 /* FollowersFollowingSheet.swift in Sources */,
 				4904CA0829D32352005D1AA3 /* Tabs.swift in Sources */,
@@ -524,6 +547,7 @@
 				49BA6C4B29CF298C00C24E9F /* CardInfo.swift in Sources */,
 				49DE5EE029C9E66E00CAA06A /* Button.swift in Sources */,
 				49E620D929DDECF0004BB0D9 /* FollowRepository.swift in Sources */,
+				4900C21829E04E02000C4355 /* PostCommentSheet.swift in Sources */,
 				49D1AC8E29CB1280004A651C /* InitializationSecondStep.swift in Sources */,
 				49DE5EC729C9BE5300CAA06A /* Router.swift in Sources */,
 				49DE5EDE29C9E0A800CAA06A /* Placeholder.swift in Sources */,

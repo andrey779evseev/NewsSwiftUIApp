@@ -9,13 +9,15 @@ import SwiftUI
 
 struct PostSheet: View {
     @EnvironmentObject var auth: AuthService
-    var post: ExtendedPostModel = TestExtendedPostModel
+    @Binding var post: ExtendedPostModel
     @Environment(\.dismiss) var dismiss
     @State private var isCommentsScreen = false
     
-    @State private var comment = ""
     @State private var followed: FollowModel? = nil
     @State private var isLoadingFollowModel = true
+    
+    @State private var liked: LikeModel? = nil
+    @State private var commentsCount: Int = 0
     
     var label: String {
         if let _ = followed {
@@ -25,58 +27,20 @@ struct PostSheet: View {
         }
     }
     
+    var isLiked: Bool {
+        liked != nil
+    }
+    
     @ViewBuilder
     var body: some View {
         Group {
             if isCommentsScreen {
-                VStack(spacing: 0) {
-                    VStack(spacing: 16) {
-                        HStack {
-                            Image(systemName: "arrow.backward")
-                                .font(.system(size: 20))
-                                .foregroundColor(.body)
-                                .onTapGesture {
-                                    withAnimation {
-                                        isCommentsScreen = false
-                                    }
-                                }
-                            Spacer()
-                            Text("Комментарии")
-                                .poppinsFont(.footnote)
-                                .foregroundColor(.dark)
-                            Spacer()
-                            Text("\t")
-                        }
-                        ScrollView(showsIndicators: false) {
-                            VStack(spacing: 8) {
-                                PostComment()
-                                PostComment()
-                                PostComment()
-                                PostComment()
-                                PostComment()
-                                PostComment()
-                                PostComment()
-                                PostComment()
-                                PostComment()
-                            }
-                        }
+                PostCommentSheet(postId: post.id!, count: $commentsCount) {
+                    withAnimation {
+                        isCommentsScreen = false
                     }
-                    .padding([.top, .leading, .trailing], 24)
-                    HStack(spacing: 4) {
-                        Input(value: $comment, placeholder: "Введите ваш комменатрий")
-                        RoundedRectangle(cornerRadius: 6)
-                            .foregroundColor(.blue)
-                            .frame(width: 50, height: 50)
-                            .overlay(
-                                Image(systemName: "paperplane")
-                                    .font(.system(size: 20))
-                                    .foregroundColor(.white)
-                            )
-                    }
-                    .padding(.horizontal, 24)
-                    .frame(height: 78)
                 }
-                .transition(.move(edge: .trailing))
+                .environmentObject(auth)
             } else {
                 VStack(spacing: 0) {
                     VStack(alignment: .leading, spacing: 16) {
@@ -135,18 +99,37 @@ struct PostSheet: View {
                     }
                     .padding([.top, .leading, .trailing], 24)
                     HStack(spacing: 4) {
-                        Image(systemName: "heart.fill")
-                            .font(.system(size: 20))
-                            .foregroundColor(.error)
-                        Text("24.5K")
-                            .poppinsFont(.footnote)
-                            .foregroundColor(.dark)
-                            .padding(.trailing, 26)
+                        Group {
+                            Image(systemName: isLiked ? "heart.fill" : "heart")
+                                .font(.system(size: 20))
+                                .foregroundColor(isLiked ? .error : .dark)
+                            Text(post.likesAmount.shorted())
+                                .poppinsFont(.footnote)
+                                .foregroundColor(.dark)
+                                .padding(.trailing, 26)
+                        }
+                        .onTapGesture {
+                            Task {
+                                if isLiked {
+                                    await LikeRepository.unlike(liked!.id!, in: post.id!)
+                                    withAnimation(.spring()) {
+                                        liked = nil
+                                        post.decrementLikes()
+                                    }
+                                } else {
+                                    let model = await LikeRepository.like(post.id!, by: auth.user!.uid)
+                                    withAnimation(.spring()) {
+                                        liked = model
+                                        post.incrementLikes()
+                                    }
+                                }
+                            }
+                        }
                         Group {
                             Image(systemName: "ellipsis.message")
                                 .font(.system(size: 20))
                                 .foregroundColor(.dark)
-                            Text("1K")
+                            Text(commentsCount.shorted())
                                 .poppinsFont(.footnote)
                                 .foregroundColor(.dark)
                         }
@@ -170,12 +153,14 @@ struct PostSheet: View {
         .task {
             followed = await FollowRepository.getFollowed(post.userUid, by: auth.user!.id!)
             isLoadingFollowModel = false
+            liked = await LikeRepository.isLiked(post.id!, by: auth.user!.uid)
+            commentsCount = await CommentRepository.count(by: post.id!)
         }
     }
 }
 
 struct PostSheet_Previews: PreviewProvider {
     static var previews: some View {
-        PostSheet()
+        PostSheet(post: .constant(TestExtendedPostModel))
     }
 }

@@ -51,7 +51,7 @@ struct ExtendedPostModel: BasePostModel, Identifiable {
         self.user = user
     }
     
-    @DocumentID var id: String?
+    var id: String?
     var image: String
     var title: String
     var text: String
@@ -59,6 +59,14 @@ struct ExtendedPostModel: BasePostModel, Identifiable {
     var createdAt: Date
     var likesAmount: Int
     var user: UserModel
+    
+    mutating func incrementLikes() {
+        self.likesAmount += 1
+    }
+    
+    mutating func decrementLikes() {
+        self.likesAmount -= 1
+    }
 }
 
 

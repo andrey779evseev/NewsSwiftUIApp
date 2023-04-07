@@ -96,8 +96,8 @@ struct HomeScreen: View {
                     }
                 }
                 
-                HorizontalCard()
-                HorizontalCard()
+//                HorizontalCard()
+//                HorizontalCard()
             }
             
         }

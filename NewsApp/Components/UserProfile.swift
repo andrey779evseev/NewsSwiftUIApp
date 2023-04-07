@@ -127,8 +127,8 @@ struct UserProfile: View {
                     .scaleEffect(3)
                     .padding(.vertical, 80)
             } else if posts.count > 0 {
-                ForEach(posts) { post in
-                    HorizontalCard(post: post)
+                ForEach($posts) { $post in
+                    HorizontalCard(post: $post)
                         .environmentObject(auth)
                 }
             } else {

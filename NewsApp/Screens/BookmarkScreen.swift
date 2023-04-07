@@ -30,12 +30,12 @@ struct BookmarkScreen: View {
             })
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 16) {
-                    HorizontalCard()
-                    HorizontalCard()
-                    HorizontalCard()
-                    HorizontalCard()
-                    HorizontalCard()
-                    HorizontalCard()
+//                    HorizontalCard()
+//                    HorizontalCard()
+//                    HorizontalCard()
+//                    HorizontalCard()
+//                    HorizontalCard()
+//                    HorizontalCard()
                 }
             }
         }

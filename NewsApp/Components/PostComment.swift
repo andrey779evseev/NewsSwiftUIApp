@@ -8,41 +8,54 @@
 import SwiftUI
 
 struct PostComment: View {
+    var comment: ExtendedCommentModel
+    
+    @State private var isLiked = false
+    
     var body: some View {
         HStack(alignment: .top, spacing: 8) {
-            Avatar(url: "https://yt3.googleusercontent.com/MRywaef1JLriHf-MUivy7-WAoVAL4sB7VHZXgmprXtmpOlN73I4wBhjjWdkZNFyJNiUP6MHm1w=s900-c-k-c0x00ffffff-no-rj", size: .little, type: .circular)
+            Avatar(url: comment.user.photo, size: .little, type: .circular)
             VStack(alignment: .leading, spacing: 4) {
-                Text("BBC News")
+                Text(comment.user.name)
                     .poppinsFont(.footnoteBold)
                     .foregroundColor(.dark)
-                Text("Lorem Ipsum is simply dummy text of the printing and typesetting industry.")
+                Text(comment.text)
                     .poppinsFont(.footnote)
                     .foregroundColor(.dark)
-                HStack(spacing: 12) {
-                    Text("4н")
-                    HStack(spacing: 4) {
-                        Image(systemName: "heart.fill")
-                            .font(.system(size: 12, weight: .semibold))
-                            .foregroundColor(.error)
-                        Text("125 лайков")
-                    }
-                    HStack(spacing: 4) {
-                        Image(systemName: "arrowshape.turn.up.left")
-                            .font(.system(size: 12, weight: .semibold))
-                            .foregroundColor(.body)
-                        Text("поделиться")
+                Group {
+                    Text(formatDate(comment.createdAt))
+                    HStack(spacing: 12) {
+                        HStack(spacing: 4) {
+                            Image(systemName: isLiked ? "heart.fill" : "heart")
+                                .font(.system(size: 12))
+                                .foregroundColor(isLiked ? .error : .dark)
+                            Text("125 лайков")
+                        }
+                        .onTapGesture {
+                            withAnimation(.spring()) {
+                                isLiked = !isLiked
+                            }
+                        }
+                        HStack(spacing: 4) {
+                            Image(systemName: "arrowshape.turn.up.left")
+                                .font(.system(size: 12))
+                                .foregroundColor(.body)
+                            Text("поделиться")
+                        }
                     }
                 }
                 .poppinsFont(.callout)
                 .foregroundColor(.body)
             }
+            Spacer()
         }
+        .frame(maxWidth: .infinity)
         .padding(.all, 8)
     }
 }
 
 struct PostComment_Previews: PreviewProvider {
     static var previews: some View {
-        PostComment()
+        PostComment(comment: TestExtendedCommentModel)
     }
 }

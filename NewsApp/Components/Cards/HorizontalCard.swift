@@ -9,7 +9,7 @@ import SwiftUI
 
 struct HorizontalCard: View {
     @EnvironmentObject var auth: AuthService
-    var post: ExtendedPostModel = TestExtendedPostModel
+    @Binding var post: ExtendedPostModel
     @State private var isShowPost = false
     var body: some View {
         HStack(spacing: 4) {
@@ -20,7 +20,7 @@ struct HorizontalCard: View {
                     .lineLimit(2)
                     .poppinsFont(.footnote)
                     .foregroundColor(.dark)
-                CardInfo(user: post.user)
+                CardInfo(user: post.user, createdAt: post.createdAt)
             }
         }
         .padding(.all, 8)
@@ -28,7 +28,7 @@ struct HorizontalCard: View {
             isShowPost = true
         }
         .sheet(isPresented: $isShowPost) {
-            PostSheet(post: post)
+            PostSheet(post: $post)
                 .environmentObject(auth)
         }
     }
@@ -36,6 +36,6 @@ struct HorizontalCard: View {
 
 struct HorizontalCard_Previews: PreviewProvider {
     static var previews: some View {
-        HorizontalCard()
+        HorizontalCard(post: .constant(TestExtendedPostModel))
     }
 }
