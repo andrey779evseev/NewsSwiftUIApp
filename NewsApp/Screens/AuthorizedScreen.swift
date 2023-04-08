@@ -25,6 +25,7 @@ struct AuthorizedScreen: View {
                 case .home:
                     HomeScreen(namespace: namespace)
                         .environmentObject(router)
+                        .environmentObject(auth)
                 case .notifications:
                     NotificationScreen()
                         .environmentObject(router)
@@ -32,10 +33,12 @@ struct AuthorizedScreen: View {
                 case .popular:
                     PopularScreen()
                         .environmentObject(router)
+                        .environmentObject(auth)
                         .transition(.move(edge: .trailing))
                 case .latest:
                     LatestScreen()
                         .environmentObject(router)
+                        .environmentObject(auth)
                         .transition(.move(edge: .trailing))
                 case .search:
                     SearchScreen(auth: auth, namespace: namespace)

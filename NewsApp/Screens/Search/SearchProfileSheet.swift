@@ -8,16 +8,19 @@
 import SwiftUI
 
 struct SearchProfileSheet: View {
+    @EnvironmentObject var auth: AuthService
     @Environment(\.dismiss) var dismiss
     var user: UserModel
     var isFollowed: Bool
+    @StateObject var userProfileModel = UserProfileViewModel()
     
     var body: some View {
         VStack(spacing: 16) {
             NavigationTitle(text: "") {
                 dismiss()
             }
-            UserProfile(user: user, type: isFollowed ? .followed : .unfollowed, auth: AuthService.forTest()) {}
+            UserProfile(user: user, type: isFollowed ? .followed : .unfollowed, model: userProfileModel) {}
+                .environmentObject(auth)
         }
         .padding(.all, 24)
         .background(Color.white)

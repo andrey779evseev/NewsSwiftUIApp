@@ -10,6 +10,11 @@ import SwiftUI
 struct HomeScreen: View {
     var namespace: Namespace.ID
     @EnvironmentObject var router: Router
+    @EnvironmentObject var auth: AuthService
+    
+    @State private var popularPosts: [ExtendedPostModel] = []
+    @State private var latestPosts: [ExtendedPostModel] = []
+    @State private var isLoading = true
     
     var body: some View {
         VStack(spacing: 16) {
@@ -80,7 +85,23 @@ struct HomeScreen: View {
                     }
                 }
                 
-                VerticalCard()
+                if isLoading {
+                    ProgressView()
+                        .tint(.blue)
+                        .scaleEffect(3)
+                        .padding(.vertical, 80)
+                } else if popularPosts.isEmpty {
+                    Text("Нет постов, подпишитесь на кого нибудь")
+                        .poppinsFont(.title3)
+                        .foregroundColor(.body)
+                        .padding(.vertical, 40)
+                        .multilineTextAlignment(.center)
+                } else {
+                    ForEach($popularPosts) { $post in
+                        VerticalCard(post: $post)
+                            .environmentObject(auth)
+                    }
+                }
                 
                 HStack {
                     Text("Последние")
@@ -95,14 +116,33 @@ struct HomeScreen: View {
                             .foregroundColor(.body)
                     }
                 }
-                
-//                HorizontalCard()
-//                HorizontalCard()
+                if isLoading {
+                    ProgressView()
+                        .tint(.blue)
+                        .scaleEffect(3)
+                        .padding(.vertical, 80)
+                } else if latestPosts.isEmpty {
+                    Text("Нет постов, подпишитесь на кого нибудь")
+                        .poppinsFont(.title3)
+                        .foregroundColor(.body)
+                        .padding(.vertical, 40)
+                        .multilineTextAlignment(.center)
+                } else {
+                    ForEach($latestPosts) { $post in
+                        HorizontalCard(post: $post)
+                            .environmentObject(auth)
+                    }
+                }
             }
             
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding([.top, .leading, .trailing], 24)
+        .task {
+            self.popularPosts = await PostRepository.getFeed(for: auth.user!.id!, with: 1, sort: .popularity)
+            self.latestPosts = await PostRepository.getFeed(for: auth.user!.id!, with: 2, sort: .time)
+            isLoading = false
+        }
     }
 }
 

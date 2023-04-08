@@ -12,13 +12,10 @@ struct ProfileScreen: View {
     @EnvironmentObject var auth: AuthService
     @State private var isEdit = false
     @State private var isCreatePostSheet = false
-    
+    @StateObject var userProfileModel = UserProfileViewModel()
     
     
     var body: some View {
-        let userProfile = UserProfile(user: auth.user!, type: .own, auth: auth) {
-            isEdit = true
-        }
         ZStack(alignment: .bottomTrailing) {
             VStack(spacing: 16) {
                 HStack {
@@ -35,7 +32,10 @@ struct ProfileScreen: View {
                             router.go(.settings)
                         }
                 }
-                userProfile
+                UserProfile(user: auth.user!, type: .own, model: userProfileModel) {
+                    isEdit = true
+                }
+                .environmentObject(auth)
             }
             .sheet(isPresented: $isEdit) {
                 EditProfileSheet()
@@ -56,7 +56,7 @@ struct ProfileScreen: View {
                 }
                 .sheet(isPresented: $isCreatePostSheet, onDismiss: {
                     Task {
-                        await userProfile.getPosts()
+                        await userProfileModel.getPosts(auth.user!.uid)
                     }
                 }) {
                     AddPostSheet()
@@ -65,7 +65,7 @@ struct ProfileScreen: View {
         }
         .refreshable {
             Task {
-                await userProfile.getPosts()
+                await userProfileModel.getPosts(auth.user!.uid)
             }
         }
         .padding([.top, .leading, .trailing], 24)

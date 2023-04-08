@@ -10,14 +10,13 @@ import SwiftUI
 struct UserProfile: View {
     var user: UserModel
     var type: UserType
-    @ObservedObject var auth: AuthService
+    @ObservedObject var model: UserProfileViewModel
     var perform: () -> Void
+    @EnvironmentObject var auth: AuthService
     
-    @State private var posts: [ExtendedPostModel] = []
-    @State private var tab = "Популярные"
+    
     @State private var isFollowersSheet = false
     @State private var isFollowingsSheet = false
-    @State private var isLoading = false
     
     var buttonText: String {
         switch type {
@@ -30,17 +29,7 @@ struct UserProfile: View {
         }
     }
     
-    func getPosts () async {
-        isLoading = true
-        let sort: PostRepository.GetPostsSorting
-        if tab == "Популярные" {
-            sort = .popularity
-        } else {
-            sort = .time
-        }
-        self.posts = await PostRepository.getPosts(by: user.uid, sort: sort)
-        isLoading = false
-    }
+    
     
     var body: some View {
         ScrollView(showsIndicators: false) {
@@ -120,14 +109,21 @@ struct UserProfile: View {
                     }
                 }
             }
-            Tabs(items: ["Популярные", "Последние"], tab: $tab)
-            if isLoading {
+            Tabs(items: ["Популярные", "Последние"], tab: .init(get: { model.tab },
+                                                                set: { model.tab = $0} ))
+            .onChange(of: model.tab) { newValue in
+                Task {
+                    await model.getPosts(user.uid)
+                }
+            }
+            if model.isLoading {
                 ProgressView()
                     .tint(.blue)
                     .scaleEffect(3)
                     .padding(.vertical, 80)
-            } else if posts.count > 0 {
-                ForEach($posts) { $post in
+            } else if model.posts.count > 0 {
+                ForEach(.init(get: { model.posts },
+                              set: { model.posts = $0} )) { $post in
                     HorizontalCard(post: $post)
                         .environmentObject(auth)
                 }
@@ -139,7 +135,7 @@ struct UserProfile: View {
             }
         }
         .task {
-            await getPosts()
+            await model.getPosts(user.uid)
         }
     }
     enum UserType {
@@ -151,6 +147,6 @@ struct UserProfile: View {
 
 struct UserProfile_Previews: PreviewProvider {
     static var previews: some View {
-        UserProfile(user: TestUserModel, type: .followed, auth: AuthService.forTest()) {}
+        UserProfile(user: TestUserModel, type: .followed, model: UserProfileViewModel()) {}
     }
 }

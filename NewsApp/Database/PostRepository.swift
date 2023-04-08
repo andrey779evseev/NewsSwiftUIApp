@@ -39,10 +39,10 @@ struct PostRepository {
         switch sort {
         case .popularity:
             query = query
-                .order(by: "likesAmount")
+                .order(by: "likesAmount", descending: true)
         case .time:
             query = query
-                .order(by: "createdAt")
+                .order(by: "createdAt", descending: true)
         }
         query
             .getDocuments { (querySnapshot, err) in
@@ -75,6 +75,35 @@ struct PostRepository {
             getPosts(by: author, sort: sort) { posts in
                 continuation.resume(returning: posts)
             }
+        }
+    }
+    
+    public static func getFeed (for userId: String, with limit: Int, sort: GetPostsSorting) async -> [ExtendedPostModel] {
+        let followings = await FollowRepository.getFollowing(userId).map { following in following.uid }
+        do {
+            let snapshot = try await db.collection("posts")
+                .whereField("userUid", in: followings)
+                .order(by: sort == .popularity ? "likesAmount" : "createdAt", descending: true)
+                .limit(to: limit)
+                .getDocuments()
+            let result = snapshot.documents.compactMap { document in
+                do {
+                    return try document.data(as: PostModel.self)
+                } catch {
+                    print("error when parsing following model \(error)")
+                    return nil
+                }
+            }
+            var extendedModels: [ExtendedPostModel] = []
+            for post in result {
+                let user = await UserRepository.getUser(post.userUid)
+                let model = ExtendedPostModel(base: post, user: user!)
+                extendedModels.append(model)
+            }
+            return extendedModels
+        } catch {
+            print("Error while getting popular \(error.localizedDescription)")
+            return []
         }
     }
     

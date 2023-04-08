@@ -55,12 +55,6 @@ struct SearchScreen: View {
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 16) {
                     if tab == "Новости" {
-//                        HorizontalCard()
-//                        HorizontalCard()
-//                        HorizontalCard()
-//                        HorizontalCard()
-//                        HorizontalCard()
-//                        HorizontalCard()
                     } else {
                         ForEach(model.suggestions, id: \.uid) { user in
                             let isFollowed = model.following.contains(where: { $0.uid == user.uid })
@@ -77,6 +71,7 @@ struct SearchScreen: View {
                         }
                         .sheet(item: $profileUser) { user in
                             SearchProfileSheet(user: user, isFollowed: model.following.contains(where: { $0.uid == user.uid }))
+                                .environmentObject(auth)
                         }
                     }
                 }
