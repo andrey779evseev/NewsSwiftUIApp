@@ -18,6 +18,7 @@ struct PostSheet: View {
     
     @State private var liked: LikeModel? = nil
     @State private var commentsCount: Int = 0
+    @State private var bookmark: BookmarkModel? = nil
     
     var label: String {
         if let _ = followed {
@@ -29,6 +30,10 @@ struct PostSheet: View {
     
     var isLiked: Bool {
         liked != nil
+    }
+    
+    var isBookmark: Bool {
+        bookmark != nil
     }
     
     @ViewBuilder
@@ -139,9 +144,24 @@ struct PostSheet: View {
                             }
                         }
                         Spacer()
-                        Image(systemName: "bookmark.fill")
+                        Image(systemName: isBookmark ? "bookmark.fill" : "bookmark")
                             .font(.system(size: 20))
-                            .foregroundColor(.blue)
+                            .foregroundColor(isBookmark ? .blue : .dark)
+                            .onTapGesture {
+                                if let bookmark = bookmark {
+                                    Task {
+                                        await BookmarkRepository.removeBookmark(bookmark.id!, from: auth.user!.id!)
+                                    }
+                                    withAnimation {
+                                        self.bookmark = nil
+                                    }
+                                } else {
+                                    let model = BookmarkModel(postId: post.id!, title: post.title)
+                                    withAnimation {
+                                        self.bookmark = BookmarkRepository.saveBookmark(model, for: auth.user!.id!)
+                                    }
+                                }
+                            }
                     }
                     .padding(.horizontal, 30)
                     .frame(height: 64)
@@ -155,6 +175,7 @@ struct PostSheet: View {
             isLoadingFollowModel = false
             liked = await LikeRepository.isLiked(post.id!, by: auth.user!.uid)
             commentsCount = await CommentRepository.count(by: post.id!)
+            bookmark = await BookmarkRepository.isInBookmarks(post.id!, for: auth.user!.id!)
         }
     }
 }

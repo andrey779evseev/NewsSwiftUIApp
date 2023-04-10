@@ -10,6 +10,8 @@ import SwiftUI
 struct HorizontalCard: View {
     @EnvironmentObject var auth: AuthService
     @Binding var post: ExtendedPostModel
+    var onDismissSheet: (() -> Void)? = nil
+    
     @State private var isShowPost = false
     var body: some View {
         HStack(spacing: 4) {
@@ -27,7 +29,7 @@ struct HorizontalCard: View {
         .onTapGesture {
             isShowPost = true
         }
-        .sheet(isPresented: $isShowPost) {
+        .sheet(isPresented: $isShowPost, onDismiss: onDismissSheet) {
             PostSheet(post: $post)
                 .environmentObject(auth)
         }

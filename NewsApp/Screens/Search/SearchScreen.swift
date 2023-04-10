@@ -23,6 +23,8 @@ struct SearchScreen: View {
     @State private var search = ""
     @State private var tab = "Новости"
     @State private var profileUser: UserModel? = nil
+    @State private var posts: [ExtendedPostModel] = []
+    @State private var isLoading = true
     
     var body: some View {
         VStack(spacing: 16) {
@@ -44,40 +46,71 @@ struct SearchScreen: View {
                     .foregroundColor(.body)
             })
             .matchedGeometryEffect(id: "input", in: namespace)
-            .onChange(of: search) { value in
+            .onChange(of: search, debounceTime: 0.5) { debouncedSearchText in
                 if tab == "Авторы" {
                     withAnimation {
-                        model.getSuggestions(value)
+                        model.getSuggestions(debouncedSearchText)
+                    }
+                } else {
+                    Task {
+                        isLoading = true
+                        self.posts = await PostRepository.searchPosts(debouncedSearchText)
+                        isLoading = false
                     }
                 }
             }
             Tabs(items: ["Новости", "Авторы"], tab: $tab)
-            ScrollView(showsIndicators: false) {
-                VStack(spacing: 16) {
-                    if tab == "Новости" {
-                    } else {
-                        ForEach(model.suggestions, id: \.uid) { user in
-                            let isFollowed = model.following.contains(where: { $0.uid == user.uid })
-                            UserCard(user: user, isFollowed: isFollowed) {
-                                if isFollowed {
-                                    model.unfollow(user.uid)
-                                } else {
-                                    model.follow(user.uid)
+            if isLoading {
+                Spacer()
+                ProgressView()
+                    .tint(.blue)
+                    .scaleEffect(3)
+                Spacer()
+            } else if tab == "Новости" && posts.isEmpty {
+                Spacer()
+                Text("По данному запросу ничего не найдено")
+                    .poppinsFont(.title3)
+                    .foregroundColor(.body)
+                    .multilineTextAlignment(.center)
+                Spacer()
+            } else {
+                ScrollView(showsIndicators: false) {
+                    VStack(spacing: 16) {
+                        if tab == "Новости" {
+                            ForEach($posts) { $post in
+                                HorizontalCard(post: $post)
+                                    .environmentObject(auth)
+                            }
+                        } else {
+                            ForEach(model.suggestions, id: \.uid) { user in
+                                let isFollowed = model.following.contains(where: { $0.uid == user.uid })
+                                UserCard(user: user, isFollowed: isFollowed) {
+                                    if isFollowed {
+                                        model.unfollow(user.uid)
+                                    } else {
+                                        model.follow(user.uid)
+                                    }
+                                }
+                                .onTapGesture {
+                                    profileUser = user
                                 }
                             }
-                            .onTapGesture {
-                                profileUser = user
+                            .sheet(item: $profileUser) { user in
+                                SearchProfileSheet(user: user, isFollowed: model.following.contains(where: { $0.uid == user.uid }))
+                                    .environmentObject(auth)
                             }
-                        }
-                        .sheet(item: $profileUser) { user in
-                            SearchProfileSheet(user: user, isFollowed: model.following.contains(where: { $0.uid == user.uid }))
-                                .environmentObject(auth)
                         }
                     }
                 }
             }
         }
         .padding(.all, 24)
+        .task {
+            if tab == "Новости" {
+                self.posts = await PostRepository.searchPosts(search)
+            }
+            isLoading = false
+        }
     }
 }
 

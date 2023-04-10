@@ -25,6 +25,8 @@
 		493DF1EB29D830B600BDD51D /* PostSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493DF1EA29D830B600BDD51D /* PostSheet.swift */; };
 		493DF1ED29D83A6500BDD51D /* Shadow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493DF1EC29D83A6500BDD51D /* Shadow.swift */; };
 		49404B8229E17C260045D84D /* UserProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49404B8129E17C260045D84D /* UserProfileViewModel.swift */; };
+		494A3B7A29E3FE10004DF25B /* BookmarkRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494A3B7929E3FE10004DF25B /* BookmarkRepository.swift */; };
+		494A3B7C29E3FE34004DF25B /* BookmarkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494A3B7B29E3FE34004DF25B /* BookmarkModel.swift */; };
 		4955F6D729CC98AF00DAD480 /* HomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4955F6D629CC98AF00DAD480 /* HomeScreen.swift */; };
 		495A7A0529D9A43100347204 /* PostComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495A7A0429D9A43100347204 /* PostComment.swift */; };
 		495E757729DAC5B10026AE2F /* AddPostSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495E757629DAC5B10026AE2F /* AddPostSheet.swift */; };
@@ -81,6 +83,8 @@
 		49E3F81229D433BB00A87F69 /* BookmarkScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E3F81129D433BB00A87F69 /* BookmarkScreen.swift */; };
 		49E620D729DDE7C0004BB0D9 /* FollowersFollowingSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E620D629DDE7C0004BB0D9 /* FollowersFollowingSheet.swift */; };
 		49E620D929DDECF0004BB0D9 /* FollowRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E620D829DDECF0004BB0D9 /* FollowRepository.swift */; };
+		49ED20FC29E426B2003B5A6D /* Debounce.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49ED20FB29E426B2003B5A6D /* Debounce.swift */; };
+		49ED210229E42FCC003B5A6D /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = 49ED210129E42FCC003B5A6D /* NukeUI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -102,6 +106,8 @@
 		493DF1EA29D830B600BDD51D /* PostSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostSheet.swift; sourceTree = "<group>"; };
 		493DF1EC29D83A6500BDD51D /* Shadow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shadow.swift; sourceTree = "<group>"; };
 		49404B8129E17C260045D84D /* UserProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileViewModel.swift; sourceTree = "<group>"; };
+		494A3B7929E3FE10004DF25B /* BookmarkRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkRepository.swift; sourceTree = "<group>"; };
+		494A3B7B29E3FE34004DF25B /* BookmarkModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkModel.swift; sourceTree = "<group>"; };
 		4955F6D629CC98AF00DAD480 /* HomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreen.swift; sourceTree = "<group>"; };
 		495A7A0429D9A43100347204 /* PostComment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostComment.swift; sourceTree = "<group>"; };
 		495E757629DAC5B10026AE2F /* AddPostSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPostSheet.swift; sourceTree = "<group>"; };
@@ -155,6 +161,7 @@
 		49E3F81129D433BB00A87F69 /* BookmarkScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkScreen.swift; sourceTree = "<group>"; };
 		49E620D629DDE7C0004BB0D9 /* FollowersFollowingSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowersFollowingSheet.swift; sourceTree = "<group>"; };
 		49E620D829DDECF0004BB0D9 /* FollowRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowRepository.swift; sourceTree = "<group>"; };
+		49ED20FB29E426B2003B5A6D /* Debounce.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Debounce.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,6 +172,7 @@
 				49D1AC9C29CB56B9004A651C /* WrappingStack in Frameworks */,
 				49D1ACA629CB9981004A651C /* FirebaseAuth in Frameworks */,
 				49D1ACA829CB9981004A651C /* FirebaseFirestore in Frameworks */,
+				49ED210229E42FCC003B5A6D /* NukeUI in Frameworks */,
 				49D1ACAC29CB9981004A651C /* FirebaseStorage in Frameworks */,
 				49D1ACAA29CB9981004A651C /* FirebaseFirestoreSwift in Frameworks */,
 			);
@@ -206,6 +214,7 @@
 			children = (
 				497C2D7B29C9A97F006BECF2 /* Colors.swift */,
 				4900C21129E01335000C4355 /* Int.swift */,
+				49ED20FB29E426B2003B5A6D /* Debounce.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -291,6 +300,7 @@
 				491AD01F29DEB89A002212BF /* PostRepository.swift */,
 				4900C20D29E00EEC000C4355 /* LikeRepository.swift */,
 				4900C20F29E0124A000C4355 /* CommentRepository.swift */,
+				494A3B7929E3FE10004DF25B /* BookmarkRepository.swift */,
 			);
 			path = Database;
 			sourceTree = "<group>";
@@ -312,6 +322,7 @@
 				491AD02129DEB934002212BF /* PostModel.swift */,
 				4900C21329E01480000C4355 /* LikeModel.swift */,
 				4900C21529E044AA000C4355 /* CommentModel.swift */,
+				494A3B7B29E3FE34004DF25B /* BookmarkModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -440,6 +451,7 @@
 				49D1ACA729CB9981004A651C /* FirebaseFirestore */,
 				49D1ACA929CB9981004A651C /* FirebaseFirestoreSwift */,
 				49D1ACAB29CB9981004A651C /* FirebaseStorage */,
+				49ED210129E42FCC003B5A6D /* NukeUI */,
 			);
 			productName = NewsApp;
 			productReference = 49E3001729C8E7B20034CE20 /* NewsApp.app */;
@@ -472,6 +484,7 @@
 			packageReferences = (
 				49D1AC9A29CB56B8004A651C /* XCRemoteSwiftPackageReference "swiftui-wrapping-stack" */,
 				49D1ACA429CB9980004A651C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				49ED210029E42FCC003B5A6D /* XCRemoteSwiftPackageReference "Nuke" */,
 			);
 			productRefGroup = 49E3001829C8E7B20034CE20 /* Products */;
 			projectDirPath = "";
@@ -517,6 +530,7 @@
 				49E3001D29C8E7B20034CE20 /* ContentView.swift in Sources */,
 				4900C21429E01480000C4355 /* LikeModel.swift in Sources */,
 				49D1AC9629CB4118004A651C /* FollowViewModel.swift in Sources */,
+				494A3B7C29E3FE34004DF25B /* BookmarkModel.swift in Sources */,
 				499C0B1429D70E4500C70388 /* EditProfileSheet.swift in Sources */,
 				493DF1EB29D830B600BDD51D /* PostSheet.swift in Sources */,
 				4955F6D729CC98AF00DAD480 /* HomeScreen.swift in Sources */,
@@ -544,9 +558,11 @@
 				49E3001B29C8E7B20034CE20 /* NewsAppApp.swift in Sources */,
 				49E620D729DDE7C0004BB0D9 /* FollowersFollowingSheet.swift in Sources */,
 				4904CA0829D32352005D1AA3 /* Tabs.swift in Sources */,
+				494A3B7A29E3FE10004DF25B /* BookmarkRepository.swift in Sources */,
 				49D1ACB029CBA696004A651C /* Avatar.swift in Sources */,
 				49D1AC8C29CB1269004A651C /* InitializationFirstStep.swift in Sources */,
 				49D1AC8A29CB104E004A651C /* AccountInitialization.swift in Sources */,
+				49ED20FC29E426B2003B5A6D /* Debounce.swift in Sources */,
 				4927787B29D43F6300DDB789 /* ProfileScreen.swift in Sources */,
 				49BA6C4B29CF298C00C24E9F /* CardInfo.swift in Sources */,
 				49DE5EE029C9E66E00CAA06A /* Button.swift in Sources */,
@@ -790,6 +806,14 @@
 				kind = branch;
 			};
 		};
+		49ED210029E42FCC003B5A6D /* XCRemoteSwiftPackageReference "Nuke" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kean/Nuke";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -817,6 +841,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 49D1ACA429CB9980004A651C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseStorage;
+		};
+		49ED210129E42FCC003B5A6D /* NukeUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 49ED210029E42FCC003B5A6D /* XCRemoteSwiftPackageReference "Nuke" */;
+			productName = NukeUI;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

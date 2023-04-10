@@ -32,6 +32,17 @@ struct PostRepository {
         }
     }
     
+    public static func getPost (by id: String) async -> ExtendedPostModel? {
+        do {
+            let post = try await db.collection("posts").document(id).getDocument(as: PostModel.self)
+            let user = await UserRepository.getUser(post.userUid)
+            return ExtendedPostModel(base: post, user: user!)
+        } catch {
+            print("Error while getting post: \(error.localizedDescription)")
+            return nil
+        }
+    }
+    
     public static func getPosts(by author: String, sort: GetPostsSorting, completion: @escaping (_ posts: [ExtendedPostModel]) -> Void) {
         var query = db.collection("posts")
             .whereField("userUid", isEqualTo: author)
@@ -103,6 +114,38 @@ struct PostRepository {
             return extendedModels
         } catch {
             print("Error while getting popular \(error.localizedDescription)")
+            return []
+        }
+    }
+    
+    public static func searchPosts (_ search: String) async -> [ExtendedPostModel] {
+        do {
+            var query: Query = db.collection("posts")
+            if !search.isEmpty {
+                query = query
+                    .whereField("title", isGreaterThanOrEqualTo: search)
+                    .whereField("title", isLessThan: search + "z")
+            }
+            let snapshot = try await query
+                .limit(to: 25)
+                .getDocuments()
+            let result = snapshot.documents.compactMap { document in
+                do {
+                    return try document.data(as: PostModel.self)
+                } catch {
+                    print("error when parsing following model \(error)")
+                }
+                return nil
+            }
+            var extendedModels: [ExtendedPostModel] = []
+            for document in result {
+                let user = await UserRepository.getUser(document.userUid)
+                let model = ExtendedPostModel(base: document, user: user!)
+                extendedModels.append(model)
+            }
+            return extendedModels
+        } catch {
+            print("Error while searching posts: \(error.localizedDescription)")
             return []
         }
     }

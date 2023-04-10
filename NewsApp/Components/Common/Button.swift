@@ -68,6 +68,12 @@ struct UiButton<LeftIcon: View>: View {
         RoundedRectangle(cornerRadius: 6)
     }
     
+    var hasLeftIcon: Bool {
+        !(
+            leftIcon() is EmptyView
+        )
+    }
+    
     @ViewBuilder
     var body: some View {
         let btn = Button {
@@ -82,7 +88,7 @@ struct UiButton<LeftIcon: View>: View {
                 }
                     
                 HStack(spacing: 10) {
-                    if let leftIcon = leftIcon {
+                    if hasLeftIcon {
                         leftIcon()
                     }
                     if isLoading {

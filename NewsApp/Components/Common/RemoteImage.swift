@@ -6,56 +6,13 @@
 //
 
 import SwiftUI
+import NukeUI
 
 struct RemoteImage: View {
     let url: String
     let width: RemoteImageWidth
     let height: RemoteImageHeight
     @State private var opacity = 0.5
-    
-    @ViewBuilder
-    var img: some View {
-        if url.isEmpty {
-            RoundedRectangle(cornerRadius: 6)
-                .foregroundColor(.gray20)
-                .overlay(
-                    Image(systemName: "exclamationmark.triangle")
-                        .font(.system(size: 20))
-                        .foregroundColor(.error)
-                )
-        } else {
-            AsyncImage(
-                url: URL(string: url),
-                transaction: Transaction(animation: .easeInOut)
-            ) { phase in
-                switch phase {
-                case .empty:
-                    Rectangle()
-                        .fill(Color.gray)
-                        .opacity(opacity)
-                        .onAppear {
-                            withAnimation(Animation.easeInOut(duration: 1).repeatForever(autoreverses: true)) {
-                                self.opacity = 0.1
-                            }
-                        }
-                case .success(let image):
-                    image
-                        .resizable()
-                        .scaledToFill()
-                case .failure:
-                    Rectangle()
-                        .foregroundColor(.gray20)
-                        .overlay(
-                            Image(systemName: "wifi.slash")
-                                .font(.system(size: 20))
-                                .foregroundColor(.error)
-                        )
-                @unknown default:
-                    EmptyView()
-                }
-            }
-        }
-    }
     
     @ViewBuilder
     var rect: some View {
@@ -87,7 +44,33 @@ struct RemoteImage: View {
     
     var body: some View {
         rect
-            .overlay(img)
+            .overlay(
+                LazyImage(url: URL(string: url))  { state in
+                    if let image = state.image {
+                        image
+                            .resizable()
+                            .scaledToFill()
+                            .transition(.opacity)
+                    } else if state.error != nil {
+                        RoundedRectangle(cornerRadius: 6)
+                            .foregroundColor(.gray20)
+                            .overlay(
+                                Image(systemName: "exclamationmark.triangle")
+                                    .font(.system(size: 20))
+                                    .foregroundColor(.error)
+                            )
+                    } else {
+                        Rectangle()
+                            .fill(Color.gray)
+                            .opacity(opacity)
+                            .onAppear {
+                                withAnimation(Animation.easeInOut(duration: 1).repeatForever(autoreverses: true)) {
+                                    self.opacity = 0.1
+                                }
+                            }
+                    }
+                }
+            )
             .clipShape(Rectangle())
     }
     
