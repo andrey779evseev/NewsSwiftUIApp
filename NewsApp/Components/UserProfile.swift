@@ -17,6 +17,9 @@ struct UserProfile: View {
     
     @State private var isFollowersSheet = false
     @State private var isFollowingsSheet = false
+    @State private var followersCount = 0
+    @State private var followingCount = 0
+    @State private var postsCount = 0
     
     var buttonText: String {
         switch type {
@@ -37,7 +40,7 @@ struct UserProfile: View {
                 Avatar(url: user.photo, size: .big, type: .circular)
                 Spacer()
                 VStack(spacing: 0) {
-                    Text("1.2M")
+                    Text(followersCount.shorted())
                         .poppinsFont(.captionBold)
                         .foregroundColor(.dark)
                     Text("Подписчики")
@@ -54,7 +57,7 @@ struct UserProfile: View {
                 }
                 Spacer()
                 VStack(spacing: 0) {
-                    Text("1.3M")
+                    Text(followingCount.shorted())
                         .poppinsFont(.captionBold)
                         .foregroundColor(.dark)
                     Text("Подпиcки")
@@ -71,7 +74,7 @@ struct UserProfile: View {
                 }
                 Spacer()
                 VStack(spacing: 0) {
-                    Text("328")
+                    Text(postsCount.shorted())
                         .poppinsFont(.captionBold)
                         .foregroundColor(.dark)
                     Text("Новости")
@@ -136,6 +139,9 @@ struct UserProfile: View {
         }
         .task {
             await model.getPosts(user.uid)
+            self.followersCount = await FollowRepository.getFollowersCount(auth.user!.id!)
+            self.followingCount = await FollowRepository.getFollowingCount(auth.user!.id!)
+            self.postsCount = await PostRepository.getPostsCount(auth.user!.uid)
         }
     }
     enum UserType {

@@ -14,7 +14,6 @@ struct ProfileScreen: View {
     @State private var isCreatePostSheet = false
     @StateObject var userProfileModel = UserProfileViewModel()
     
-    
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
             VStack(spacing: 16) {
@@ -54,19 +53,19 @@ struct ProfileScreen: View {
                 .onTapGesture {
                     isCreatePostSheet = true
                 }
-                .sheet(isPresented: $isCreatePostSheet, onDismiss: {
-                    Task {
-                        await userProfileModel.getPosts(auth.user!.uid)
-                    }
-                }) {
-                    AddPostSheet()
-                        .environmentObject(auth)
-                }
         }
         .refreshable {
             Task {
                 await userProfileModel.getPosts(auth.user!.uid)
             }
+        }
+        .sheet(isPresented: $isCreatePostSheet, onDismiss: {
+            Task {
+                await userProfileModel.getPosts(auth.user!.uid)
+            }
+        }) {
+            AddPostSheet()
+                .environmentObject(auth)
         }
         .padding([.top, .leading, .trailing], 24)
     }

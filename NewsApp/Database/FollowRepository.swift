@@ -166,4 +166,26 @@ struct FollowRepository {
             }
         }
     }
+    
+    public static func getFollowersCount (_ userId: String) async -> Int {
+        let query = db.collection("users").document(userId).collection("followers").count
+        do {
+            let snapshot = try await query.getAggregation(source: .server)
+            return snapshot.count.intValue
+        } catch {
+            print("Error while getting count of followers: \(error.localizedDescription)")
+            return 0
+        }
+    }
+    
+    public static func getFollowingCount (_ userId: String) async -> Int {
+        let query = db.collection("users").document(userId).collection("following").count
+        do {
+            let snapshot = try await query.getAggregation(source: .server)
+            return snapshot.count.intValue
+        } catch {
+            print("Error while getting count of followers: \(error.localizedDescription)")
+            return 0
+        }
+    }
 }

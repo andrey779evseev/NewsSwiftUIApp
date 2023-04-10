@@ -91,6 +91,7 @@ struct PostRepository {
     
     public static func getFeed (for userId: String, with limit: Int, sort: GetPostsSorting) async -> [ExtendedPostModel] {
         let followings = await FollowRepository.getFollowing(userId).map { following in following.uid }
+        guard !followings.isEmpty else {return []}
         do {
             let snapshot = try await db.collection("posts")
                 .whereField("userUid", in: followings)
@@ -147,6 +148,17 @@ struct PostRepository {
         } catch {
             print("Error while searching posts: \(error.localizedDescription)")
             return []
+        }
+    }
+    
+    public static func getPostsCount (_ userUid: String) async -> Int {
+        let query = db.collection("posts").whereField("userUid", isEqualTo: userUid).count
+        do {
+            let snapshot = try await query.getAggregation(source: .server)
+            return snapshot.count.intValue
+        } catch {
+            print("Error while getting count of followers: \(error.localizedDescription)")
+            return 0
         }
     }
     
