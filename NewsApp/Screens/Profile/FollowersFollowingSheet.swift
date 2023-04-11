@@ -45,13 +45,15 @@ struct FollowersFollowingSheet: View {
                         ForEach(users) { model in
                             let isFollowed = following.contains {$0.uid == model.uid}
                             UserCard(user: model, isFollowed: isFollowers && isFollowed, hideButton: !isFollowers) {
-                                if isFollowed {
-                                    let follow = self.following.first {$0.uid == model.uid}!
-                                    FollowRepository.unfollow(follow.id!, with: user.id!, by: user.uid)
-                                    self.following.removeAll {$0.uid == model.uid}
-                                } else {
-                                    let model = FollowRepository.follow(model.uid, with: user.id!, by: user.uid)
-                                    self.following.append(model!)
+                                Task {
+                                    if isFollowed {
+                                        let follow = self.following.first {$0.uid == model.uid}!
+                                        await FollowRepository.unfollow(follow.id!, from: user.id!, by: model.uid)
+                                        self.following.removeAll {$0.uid == model.uid}
+                                    } else {
+                                        let model = await FollowRepository.follow(model.uid, with: user.id!, by: user.uid)
+                                        self.following.append(model!)
+                                    }
                                 }
                             }
 //                            .onTapGesture {

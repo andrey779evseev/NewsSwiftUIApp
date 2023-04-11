@@ -20,7 +20,7 @@ struct VerticalCard: View {
                 .poppinsFont(.footnote)
                 .foregroundColor(.dark)
                 .padding(.bottom, 4)
-            CardInfo()
+            CardInfo(user: post.user, createdAt: post.createdAt)
                 
         }
         .padding(.all, 8)

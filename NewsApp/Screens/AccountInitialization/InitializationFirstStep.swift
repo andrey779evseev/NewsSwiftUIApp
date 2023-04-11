@@ -72,12 +72,15 @@ struct InitializationFirstStep: View {
                                     .padding(.bottom, 8)
                                 if let _ = model.following.first(where: { $0.uid == user.uid}) {
                                     UiButton(type: .primary, size: .small, text: "Отписаться") {
-                                        model.unfollow(user.uid)
+                                        Task {
+                                            await model.unfollow(user.uid)
+                                        }
                                     }
                                 } else {
                                     UiButton(type: .outline, size: .small, text: "Подписаться") {
-                                        print("Button clicked")
-                                        model.follow(user.uid)
+                                        Task {
+                                            await model.follow(user.uid)
+                                        }
                                     }
                                 }
                             }

@@ -34,20 +34,22 @@ final class FollowViewModel: ObservableObject {
         }
     }
     
-    public func follow (_ uid: String) {
-        let model = FollowRepository.follow(uid, with: self.userId, by: self.uid)
+    public func follow (_ uid: String) async {
+        let model = await FollowRepository.follow(uid, with: self.userId, by: self.uid)
         if let model = model {
-            withAnimation {
-                following.append(model)
+            DispatchQueue.main.sync {
+                self.following.append(model)
             }
+        } else {
+            print("Following doesnt happend")
         }
     }
     
-    public func unfollow (_ uid: String) {
-        if let model = following.first(where: { $0.uid == uid }) {
-            FollowRepository.unfollow(model.id!, with: self.userId, by: self.uid)
-            withAnimation {
-                following = following.filter {$0.uid != uid}
+    public func unfollow (_ uid: String) async {
+        if let model = self.following.first(where: { $0.uid == uid }) {
+            await FollowRepository.unfollow(model.id!, from: self.userId, by: uid)
+            DispatchQueue.main.sync {
+                self.following = self.following.filter {$0.uid != uid}
             }
         }
     }

@@ -40,7 +40,7 @@ struct PostSheet: View {
     var body: some View {
         Group {
             if isCommentsScreen {
-                PostCommentSheet(postId: post.id!, count: $commentsCount) {
+                PostCommentSheet(post: post, count: $commentsCount) {
                     withAnimation {
                         isCommentsScreen = false
                     }
@@ -78,11 +78,13 @@ struct PostSheet: View {
                             Spacer()
                             
                             UiButton(type: .primary, size: .small, text: label, isLoading: isLoadingFollowModel) {
-                                if let followed = followed {
-                                    FollowRepository.unfollow(followed.id!, with: auth.user!.id!, by: auth.user!.uid)
-                                    self.followed = nil
-                                } else {
-                                    self.followed = FollowRepository.follow(post.userUid, with: auth.user!.id!, by: auth.user!.uid)
+                                Task {
+                                    if let followed = followed {
+                                        await FollowRepository.unfollow(followed.id!, from: auth.user!.id!, by: post.userUid)
+                                        self.followed = nil
+                                    } else {
+                                        self.followed = await FollowRepository.follow(post.userUid, with: auth.user!.id!, by: auth.user!.uid)
+                                    }
                                 }
                             }
                         }
@@ -122,7 +124,7 @@ struct PostSheet: View {
                                         post.decrementLikes()
                                     }
                                 } else {
-                                    let model = await LikeRepository.like(post.id!, by: auth.user!.uid)
+                                    let model = await LikeRepository.like(post, by: auth.user!.uid)
                                     withAnimation(.spring()) {
                                         liked = model
                                         post.incrementLikes()

@@ -15,3 +15,11 @@ func formatDate (_ date: Date) -> String {
 
     return formatter.localizedString(for: date, relativeTo: Date.now)
 }
+
+func fullDate (_ date: Date) -> String {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "EEEE, MMMM d"
+    formatter.locale = Locale(identifier: "ru-RU")
+    
+    return formatter.string(from: date)
+}

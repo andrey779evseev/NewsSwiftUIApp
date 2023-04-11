@@ -81,61 +81,52 @@ struct FollowRepository {
         return usersModels
     }
     
-    public static func follow(_ uid: String, with userId: String, by: String) -> FollowModel? {
+    /// uid: who you want to start follow
+    /// with: user id (document id) who wants to follow
+    /// by: user uid who wants to follow
+    public static func follow(_ uid: String, with userId: String, by: String) async -> FollowModel? {
         var model = FollowModel(uid: uid)
         do {
             let ref = try db.collection("users").document(userId).collection("following")
-                .addDocument(from: model) { err in
-                    if let err = err {
-                        print("Error adding document: \(err)")
-                    }
-                }
-            UserRepository.getUser(uid) { user in
-                if let user = user {
-                    let model = FollowModel(uid: by)
-                    do {
-                        try db.collection("users").document(user.id!).collection("followers")
-                            .addDocument(from: model) { err in
-                                if let err = err {
-                                    print("Error adding document: \(err)")
-                                }
-                            }
-                    } catch {
-                        print("error while adding user to followers \(error)")
-                    }
-                }
-            }
+                .addDocument(from: model)
+            let user = await UserRepository.getUser(uid)!
+            try db.collection("users").document(user.id!).collection("followers")
+                .addDocument(from: model)
             model.setId(ref.documentID)
+            
+            await NotificationRepository.saveNotification(from: by, to: uid, type: .follow)
+            
             return model
         } catch {
             print("error while follow \(error)")
+            return nil
         }
-        return nil
     }
     
-    public static func unfollow(_ id: String, with userId: String, by: String) {
-        db.collection("users").document(userId).collection("following").document(id).delete()
-        UserRepository.getUser(by) { user in
-            if let userModel = user {
-                db.collection("users").document(userModel.id!).collection("followers").whereField("uid", isEqualTo: by)
-                    .getDocuments() { (querySnapshot, err) in
-                        if let err = err {
-                            print("Error getting documents: \(err)")
-                        } else if let data = querySnapshot!.documents.first {
-                            do {
-                                let follower = try data.data(as: FollowModel.self)
-                                db.collection("users").document(userModel.id!).collection("followers").document(follower.id!).delete()
-                            }
-                            catch {
-                                print(error)
-                            }
-                        } else {
-                            print("Not found follower with this uid \(by)")
-                        }
-                    }
-            } else {
-                print("Error founding user")
+    /// id: document id of follow model
+    /// from: document id who follow
+    /// by: user uid who is followed
+    public static func unfollow(_ id: String, from userId: String, by: String) async {
+        do {
+            try await db.collection("users").document(userId).collection("following").document(id).delete()
+            let user = await UserRepository.getUser(by)!
+            let snapshot = try await db
+                .collection("users")
+                .document(user.id!)
+                .collection("followers")
+                .whereField("uid", isEqualTo: by)
+                .getDocuments()
+            if let data = snapshot.documents.first {
+                let follower = try data.data(as: FollowModel.self)
+                try await db
+                    .collection("users")
+                    .document(user.id!)
+                    .collection("followers")
+                    .document(follower.id!)
+                    .delete()
             }
+        } catch {
+            print("Error while unfollowing user: \(error.localizedDescription)")
         }
     }
     

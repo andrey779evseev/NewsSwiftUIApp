@@ -37,32 +37,21 @@ struct LikeRepository {
         }
     }
     
-    public static func like(_ postId: String, by userUid: String, completion: @escaping (_ like: LikeModel?) -> Void) {
+    public static func like(_ post: ExtendedPostModel, by userUid: String) async -> LikeModel? {
         var model = LikeModel(uid: userUid)
-        db.collection("posts").document(postId).updateData([
-            "likesAmount": FieldValue.increment(Int64(1))
-        ]) { _ in
-            do {
-                let ref = try db.collection("posts").document(postId).collection("likes").addDocument(from: model) { err in
-                    if let err = err {
-                        print("Error adding like document: \(err)")
-                    }
-                }
-                model.setId(ref.documentID)
-                completion(model)
-            } catch {
-                print(error)
-                completion(nil)
-            }
-        }
-        
-    }
-    
-    public static func like(_ postId: String, by userUid: String) async -> LikeModel? {
-        await withCheckedContinuation { continuation in
-            like(postId, by: userUid) { model in
-                continuation.resume(returning: model)
-            }
+        do {
+            try await db.collection("posts").document(post.id!).updateData([
+                "likesAmount": FieldValue.increment(Int64(1))
+            ])
+            let ref = try db.collection("posts").document(post.id!).collection("likes").addDocument(from: model)
+            model.setId(ref.documentID)
+            
+            await NotificationRepository.saveNotification(from: userUid, postName: post.title, to: post.userUid, type: .like)
+            
+            return model
+        } catch {
+            print("Error while liking the post: \(error.localizedDescription)")
+            return nil
         }
     }
     

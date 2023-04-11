@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PostCommentSheet: View {
     @EnvironmentObject var auth: AuthService
-    var postId: String
+    var post: ExtendedPostModel
     @Binding var count: Int
     var back: () -> Void
     
@@ -21,7 +21,7 @@ struct PostCommentSheet: View {
     func postComment () async {
         isSendingComment = true
         let model = CommentModel(text: comment, userUid: auth.user!.uid, createdAt: Date.now)
-        if let result = await CommentRepository.addComment(model, for: postId) {
+        if let result = await CommentRepository.addComment(model, for: post) {
             let extendedModel = ExtendedCommentModel(model: result, user: auth.user!)
             withAnimation(.spring()) {
                 comments.append(extendedModel)
@@ -106,7 +106,7 @@ struct PostCommentSheet: View {
         .background(Color.white)
         .transition(.move(edge: .trailing))
         .task {
-            comments = await CommentRepository.getComments(postId)
+            comments = await CommentRepository.getComments(post.id!)
             isLoading = false
         }
     }
@@ -114,6 +114,6 @@ struct PostCommentSheet: View {
 
 struct PostCommentSheet_Previews: PreviewProvider {
     static var previews: some View {
-        PostCommentSheet(postId: "", count: .constant(1)) {}
+        PostCommentSheet(post: TestExtendedPostModel, count: .constant(1)) {}
     }
 }

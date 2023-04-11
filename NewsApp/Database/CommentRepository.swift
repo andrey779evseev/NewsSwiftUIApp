@@ -57,28 +57,19 @@ struct CommentRepository {
         }
     }
     
-    public static func addComment(_ model: CommentModel, for postId: String, completion: @escaping (_ model: CommentModel?) -> Void) {
+    public static func addComment(_ model: CommentModel, for post: ExtendedPostModel) async -> CommentModel? {
         do {
-            let ref = try db.collection("posts").document(postId).collection("comments").addDocument(from: model) { err in
-                if let err = err {
-                    print("Error adding like document: \(err)")
-                }
-            }
+            let ref = try db.collection("posts").document(post.id!).collection("comments").addDocument(from: model)
             var model = model
             model.setId(ref.documentID)
-            completion(model)
+            
+            await NotificationRepository.saveNotification(from: model.userUid, postName: post.title, to: post.userUid, type: .comment)
+            
+            return model
         } catch {
-            print(error)
-            completion(nil)
+            print("Error while adding comment: \(error.localizedDescription)")
+            return nil
         }
         
-    }
-    
-    public static func addComment(_ model: CommentModel, for postId: String) async -> CommentModel? {
-        await withCheckedContinuation { continuation in
-            addComment(model, for: postId) { model in
-                continuation.resume(returning: model)
-            }
-        }
     }
 }

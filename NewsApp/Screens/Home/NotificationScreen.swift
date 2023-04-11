@@ -9,6 +9,10 @@ import SwiftUI
 
 struct NotificationScreen: View {
     @EnvironmentObject var router: Router
+    @EnvironmentObject var auth: AuthService
+    
+    @State private var notifications: [Date: [ExtendedNotificationModel]] = [:]
+    @State private var isLoading = true
     
     var body: some View {
         VStack(spacing: 16) {
@@ -16,27 +20,43 @@ struct NotificationScreen: View {
                 router.go(.home)
             }
             
-            ScrollView(showsIndicators: false) {
-                VStack(alignment: .leading) {
-                    Text("Сегодня, Апрель 22")
-                        .poppinsFont(.footnoteBold)
-                        .foregroundColor(.dark)
-                    
-                    NotificationCard(type: .post)
-                    NotificationCard(type: .follow)
-                    NotificationCard(type: .comment)
-                    
-                    Text("Вчера, Апрель 21")
-                        .poppinsFont(.footnoteBold)
-                    
-                    NotificationCard(type: .like)
-                    NotificationCard(type: .follow)
-                    NotificationCard(type: .comment)
+            if isLoading {
+                Spacer()
+                ProgressView()
+                    .tint(.blue)
+                    .scaleEffect(3)
+                Spacer()
+            } else if notifications.isEmpty {
+                Spacer()
+                Text("У вас еще нет уведомлений")
+                    .poppinsFont(.title2)
+                    .foregroundColor(.body)
+                    .multilineTextAlignment(.center)
+                Spacer()
+            } else {
+                ScrollView(showsIndicators: false) {
+                    VStack(alignment: .leading) {
+                        ForEach(Array(notifications.keys), id: \.self) { day in
+                            Text(fullDate(day))
+                                .poppinsFont(.footnoteBold)
+                                .foregroundColor(Color.dark)
+                            
+                            ForEach(notifications[day]!.sorted { $0.createdAt < $1.createdAt }) { notification in
+                                NotificationCard(notification: notification)
+                                    .environmentObject(auth)
+                            }
+                        }
+                    }
                 }
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding([.top, .leading, .trailing], 24)
+        .task {
+            let arr = await NotificationRepository.getNotifications(auth.user!.id!)
+            self.notifications = arr.groupBy(by: [.day], for: \.createdAt)
+            isLoading = false
+        }
     }
 }
 

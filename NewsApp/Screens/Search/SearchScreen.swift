@@ -85,10 +85,12 @@ struct SearchScreen: View {
                             ForEach(model.suggestions, id: \.uid) { user in
                                 let isFollowed = model.following.contains(where: { $0.uid == user.uid })
                                 UserCard(user: user, isFollowed: isFollowed) {
-                                    if isFollowed {
-                                        model.unfollow(user.uid)
-                                    } else {
-                                        model.follow(user.uid)
+                                    Task {
+                                        if isFollowed {
+                                            await model.unfollow(user.uid)
+                                        } else {
+                                            await model.follow(user.uid)
+                                        }
                                     }
                                 }
                                 .onTapGesture {
