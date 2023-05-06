@@ -10,6 +10,7 @@ import SwiftUI
 struct PostSheet: View {
     @EnvironmentObject var auth: AuthService
     @Binding var post: ExtendedPostModel
+    var hideBtn: Bool = false
     @Environment(\.dismiss) var dismiss
     @State private var isCommentsScreen = false
     
@@ -77,13 +78,15 @@ struct PostSheet: View {
                             }
                             Spacer()
                             
-                            UiButton(type: .primary, size: .small, text: label, isLoading: isLoadingFollowModel) {
-                                Task {
-                                    if let followed = followed {
-                                        await FollowRepository.unfollow(followed.id!, from: auth.user!.id!, by: post.userUid)
-                                        self.followed = nil
-                                    } else {
-                                        self.followed = await FollowRepository.follow(post.userUid, with: auth.user!.id!, by: auth.user!.uid)
+                            if !hideBtn {
+                                UiButton(type: .primary, size: .small, text: label, isLoading: isLoadingFollowModel) {
+                                    Task {
+                                        if let followed = followed {
+                                            await FollowRepository.unfollow(followed.id!, from: auth.user!.id!, by: post.userUid)
+                                            self.followed = nil
+                                        } else {
+                                            self.followed = await FollowRepository.follow(post.userUid, with: auth.user!.id!, by: auth.user!.uid)
+                                        }
                                     }
                                 }
                             }

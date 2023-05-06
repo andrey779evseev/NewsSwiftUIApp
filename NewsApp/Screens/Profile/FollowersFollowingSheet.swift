@@ -44,7 +44,7 @@ struct FollowersFollowingSheet: View {
                     VStack(spacing: 16) {
                         ForEach(users) { model in
                             let isFollowed = following.contains {$0.uid == model.uid}
-                            UserCard(user: model, isFollowed: isFollowers && isFollowed, hideButton: !isFollowers) {
+                            UserCard(user: model, isFollowed: isFollowed, hideButton: isFollowers) {
                                 Task {
                                     if isFollowed {
                                         let follow = self.following.first {$0.uid == model.uid}!
@@ -72,10 +72,10 @@ struct FollowersFollowingSheet: View {
         .task {
             if isFollowers {
                 self.users = await FollowRepository.getFollowersModels(user.id!)
-                self.following = await FollowRepository.getFollowing(user.id!)
                 isLoading = false
             } else {
                 self.users = await FollowRepository.getFollowingModels(user.id!)
+                self.following = await FollowRepository.getFollowing(user.id!)
                 isLoading = false
             }
         }

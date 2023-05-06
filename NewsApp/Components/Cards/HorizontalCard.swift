@@ -10,6 +10,7 @@ import SwiftUI
 struct HorizontalCard: View {
     @EnvironmentObject var auth: AuthService
     @Binding var post: ExtendedPostModel
+    var hideBtn: Bool = false
     var onDismissSheet: (() -> Void)? = nil
     
     @State private var isShowPost = false
@@ -30,7 +31,7 @@ struct HorizontalCard: View {
             isShowPost = true
         }
         .sheet(isPresented: $isShowPost, onDismiss: onDismissSheet) {
-            PostSheet(post: $post)
+            PostSheet(post: $post, hideBtn: hideBtn)
                 .environmentObject(auth)
         }
     }

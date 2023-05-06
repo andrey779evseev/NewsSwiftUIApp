@@ -33,7 +33,7 @@ struct InitializationFirstStep: View {
         VStack(spacing: 0) {
             VStack(spacing: 0) {
                 HStack {
-                    Text("Выберите источники новостей ggg")
+                    Text("Выберите источники новостей")
                         .poppinsFont(.footnoteBold)
                         .foregroundColor(.dark)
                 }

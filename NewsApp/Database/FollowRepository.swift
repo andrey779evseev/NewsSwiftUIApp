@@ -91,7 +91,7 @@ struct FollowRepository {
                 .addDocument(from: model)
             let user = await UserRepository.getUser(uid)!
             try db.collection("users").document(user.id!).collection("followers")
-                .addDocument(from: model)
+                .addDocument(from: FollowModel(uid: by))
             model.setId(ref.documentID)
             
             await NotificationRepository.saveNotification(from: by, to: uid, type: .follow)

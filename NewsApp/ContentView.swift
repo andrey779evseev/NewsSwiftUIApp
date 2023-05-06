@@ -28,6 +28,7 @@ struct ContentView: View {
             }
         }
         .background(Color.white)
+        .preferredColorScheme(.light)
         .onAppear {
             auth.listenToAuthState()
         }

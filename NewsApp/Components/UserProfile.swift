@@ -11,15 +11,15 @@ struct UserProfile: View {
     var user: UserModel
     var type: UserType
     @ObservedObject var model: UserProfileViewModel
+    @Binding var followersCount: Int
+    @Binding var followingCount: Int
+    @Binding var postsCount: Int
     var perform: () -> Void
     @EnvironmentObject var auth: AuthService
     
     
     @State private var isFollowersSheet = false
     @State private var isFollowingsSheet = false
-    @State private var followersCount = 0
-    @State private var followingCount = 0
-    @State private var postsCount = 0
     
     var buttonText: String {
         switch type {
@@ -127,7 +127,7 @@ struct UserProfile: View {
             } else if model.posts.count > 0 {
                 ForEach(.init(get: { model.posts },
                               set: { model.posts = $0} )) { $post in
-                    HorizontalCard(post: $post)
+                    HorizontalCard(post: $post, hideBtn: user.uid == auth.user!.uid)
                         .environmentObject(auth)
                 }
             } else {
@@ -139,9 +139,6 @@ struct UserProfile: View {
         }
         .task {
             await model.getPosts(user.uid)
-            self.followersCount = await FollowRepository.getFollowersCount(auth.user!.id!)
-            self.followingCount = await FollowRepository.getFollowingCount(auth.user!.id!)
-            self.postsCount = await PostRepository.getPostsCount(auth.user!.uid)
         }
     }
     enum UserType {
@@ -153,6 +150,13 @@ struct UserProfile: View {
 
 struct UserProfile_Previews: PreviewProvider {
     static var previews: some View {
-        UserProfile(user: TestUserModel, type: .followed, model: UserProfileViewModel()) {}
+        UserProfile(
+            user: TestUserModel,
+            type: .followed,
+            model: UserProfileViewModel(),
+            followersCount: .constant(1),
+            followingCount: .constant(1),
+            postsCount: .constant(1)
+        ) {}
     }
 }

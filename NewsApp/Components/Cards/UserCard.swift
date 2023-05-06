@@ -12,6 +12,9 @@ struct UserCard: View {
     var isFollowed: Bool
     var hideButton = false
     var perform: () -> Void
+    
+    @State private var followersCount = 0
+    
     var body: some View {
         HStack(spacing: 0) {
             Avatar(url: user.photo, size: .medium, type: .circular)
@@ -20,7 +23,7 @@ struct UserCard: View {
                 Text(user.name.isEmpty ? user.email : user.name)
                     .poppinsFont(.footnote)
                     .foregroundColor(.dark)
-                Text("1.2M Подписчиков")
+                Text("\(followersCount.shorted()) Подписчиков")
                     .poppinsFont(.caption)
                     .foregroundColor(.body)
             }
@@ -36,6 +39,9 @@ struct UserCard: View {
                         .foregroundColor(.blue)})
                 }
             }
+        }
+        .task {
+            self.followersCount = await FollowRepository.getFollowersCount(user.id!)
         }
     }
 }

@@ -11,23 +11,28 @@ struct CardInfo: View {
     var user: UserModel = TestUserModel
     var createdAt: Date = Date.now.addingTimeInterval(-15000)
     var body: some View {
-        HStack(spacing: 0) {
-            Avatar(url: user.photo, size: .small, type: .circular)
-                .padding(.trailing, 4)
-            Text(user.name)
-                .poppinsFont(.calloutBold)
-                .foregroundColor(.body)
-                .padding(.trailing, 12)
-            Image(systemName: "clock")
-                .font(.system(size: 12))
-                .foregroundColor(.body)
-                .padding(.trailing, 4)
-            Text(formatDate(createdAt))
-                .poppinsFont(.callout)
-                .foregroundColor(.body)
-            Spacer()
-            Image(systemName: "ellipsis")
-                .font(.system(size: 14))
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: 0) {
+                Avatar(url: user.photo, size: .small, type: .circular)
+                    .padding(.trailing, 4)
+                Text(user.name)
+                    .lineLimit(1)
+                    .poppinsFont(.calloutBold)
+                    .foregroundColor(.body)
+                    .padding(.trailing, 12)
+            }
+            HStack(spacing: 0) {
+                Image(systemName: "clock")
+                    .font(.system(size: 12))
+                    .foregroundColor(.body)
+                    .padding(.trailing, 4)
+                Text(formatDate(createdAt))
+                    .poppinsFont(.callout)
+                    .foregroundColor(.body)
+                Spacer()
+                Image(systemName: "ellipsis")
+                    .font(.system(size: 14))
+            }
         }
     }
 }

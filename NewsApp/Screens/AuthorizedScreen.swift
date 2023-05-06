@@ -55,14 +55,7 @@ struct AuthorizedScreen: View {
                         .environmentObject(router)
                         .transition(.move(edge: .trailing))
                 default:
-                    VStack{
-                        Text("404 Данная страница не найдена: \(router.route.rawValue)")
-                            .poppinsFont(.title)
-                            .foregroundColor(.error)
-                        UiButton(type: .primary, size: .big, text: "На главную") {
-                            router.go(.home)
-                        }
-                    }
+                    VStack{}
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
                 if router.route != .search && router.route != .settings {                

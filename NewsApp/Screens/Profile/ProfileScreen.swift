@@ -14,6 +14,10 @@ struct ProfileScreen: View {
     @State private var isCreatePostSheet = false
     @StateObject var userProfileModel = UserProfileViewModel()
     
+    @State private var followersCount = 0
+    @State private var followingCount = 0
+    @State private var postsCount = 0
+    
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
             VStack(spacing: 16) {
@@ -31,7 +35,14 @@ struct ProfileScreen: View {
                             router.go(.settings)
                         }
                 }
-                UserProfile(user: auth.user!, type: .own, model: userProfileModel) {
+                UserProfile(
+                    user: auth.user!,
+                    type: .own,
+                    model: userProfileModel,
+                    followersCount: $followersCount,
+                    followingCount: $followingCount,
+                    postsCount: $postsCount
+                ) {
                     isEdit = true
                 }
                 .environmentObject(auth)
@@ -54,9 +65,17 @@ struct ProfileScreen: View {
                     isCreatePostSheet = true
                 }
         }
+        .task {
+            self.followersCount = await FollowRepository.getFollowersCount(auth.user!.id!)
+            self.followingCount = await FollowRepository.getFollowingCount(auth.user!.id!)
+            self.postsCount = await PostRepository.getPostsCount(auth.user!.uid)
+        }
         .refreshable {
             Task {
                 await userProfileModel.getPosts(auth.user!.uid)
+                self.followersCount = await FollowRepository.getFollowersCount(auth.user!.id!)
+                self.followingCount = await FollowRepository.getFollowingCount(auth.user!.id!)
+                self.postsCount = await PostRepository.getPostsCount(auth.user!.uid)
             }
         }
         .sheet(isPresented: $isCreatePostSheet, onDismiss: {

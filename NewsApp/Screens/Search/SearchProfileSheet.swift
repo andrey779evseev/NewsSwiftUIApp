@@ -14,16 +14,32 @@ struct SearchProfileSheet: View {
     var isFollowed: Bool
     @StateObject var userProfileModel = UserProfileViewModel()
     
+    @State private var followersCount = 0
+    @State private var followingCount = 0
+    @State private var postsCount = 0
+    
     var body: some View {
         VStack(spacing: 16) {
             NavigationTitle(text: "") {
                 dismiss()
             }
-            UserProfile(user: user, type: isFollowed ? .followed : .unfollowed, model: userProfileModel) {}
+            UserProfile(
+                user: user,
+                type: isFollowed ? .followed : .unfollowed,
+                model: userProfileModel,
+                followersCount: $followersCount,
+                followingCount: $followingCount,
+                postsCount: $postsCount
+            ) {}
                 .environmentObject(auth)
         }
         .padding(.all, 24)
         .background(Color.white)
+        .task {
+            self.followersCount = await FollowRepository.getFollowersCount(auth.user!.id!)
+            self.followingCount = await FollowRepository.getFollowingCount(auth.user!.id!)
+            self.postsCount = await PostRepository.getPostsCount(auth.user!.uid)
+        }
     }
 }
 
