@@ -12,7 +12,7 @@ struct PostCommentSheet: View {
     var post: ExtendedPostModel
     @Binding var count: Int
     var back: () -> Void
-    
+    @AppStorage("isDarkMode") private var isDarkMode = false
     @State private var comment = ""
     @State private var comments: [ExtendedCommentModel] = []
     @State private var isLoading = true
@@ -103,7 +103,7 @@ struct PostCommentSheet: View {
             .frame(height: 78)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.white)
+        .background(isDarkMode ? Color.darkmodeBackground : Color.white)
         .transition(.move(edge: .trailing))
         .task {
             comments = await CommentRepository.getComments(post.id!)

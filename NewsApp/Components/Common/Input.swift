@@ -154,6 +154,7 @@ struct Input<LeftIcon: View, RightIcon: View>: View {
     @FocusState private var isFocused: Bool
     @State private var isActive = false
     @State private var isHidden = true
+    @AppStorage("isDarkMode") private var isDarkMode = false
     
     var isError: Bool {
         error != nil
@@ -191,19 +192,20 @@ struct Input<LeftIcon: View, RightIcon: View>: View {
     @ViewBuilder
     var background: some View {
         let rect = RoundedRectangle(cornerRadius: 6)
-        
-        if disabled {
+        if isDarkMode {
+            rect.fill(Color.darkmodeInputBackground)
+        } else if disabled {
             ZStack {
                 rect.fill(Color.disabled)
                 rect.stroke(Color.button.opacity(0.5))
             }
-        } else {
+        } else if isError {
             ZStack {
-                if isError {
-                    rect.fill(Color.errorLight)
-                }
-                rect.stroke(isError ? Color.errorDark : Color.body)
+                rect.fill(Color.errorLight)
+                rect.stroke(Color.errorDark)
             }
+        } else {
+            rect.stroke(Color.body)
         }
     }
     
@@ -221,83 +223,83 @@ struct Input<LeftIcon: View, RightIcon: View>: View {
                 .poppinsFont(.caption)
             }
             GeometryReader { geometry in
-                    field
-                        .toolbar {
-                            ToolbarItemGroup(placement: .keyboard) {
-                                if isFocused {
-                                    Spacer()
-                                    Button {
+                field
+                    .toolbar {
+                        ToolbarItemGroup(placement: .keyboard) {
+                            if isFocused {
+                                Spacer()
+                                Button {
+                                    isFocused = false
+                                } label: {
+                                    Image(systemName: "chevron.down")
+                                        .font(.system(size: 16))
+                                        .foregroundColor(.primary)
+                                }
+                            }
+                        }
+                    }
+                    .textInputAutocapitalization(!autocapitalization || isPassword ? .never : nil)
+                    .autocorrectionDisabled(isPassword)
+                    .foregroundColor(.dark)
+                    .disabled(disabled)
+                    .focused($isFocused)
+                    .onChange(of: isFocused) { bool in
+                        withAnimation {
+                            isActive = bool
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 48)
+                    .padding(.leading, hasLeftIcon ? 44 : 10)
+                    .padding(.trailing, 44)
+                    .placeholder(when: value == "") {
+                        Text(placeholder)
+                            .poppinsFont(.caption)
+                            .foregroundColor(.body)
+                            .padding(.leading, hasLeftIcon ? 44 : 10)
+                    }
+                    .background(background)
+                    .overlay(
+                        Group {
+                            if isActive || isPassword || hasRightIcon {
+                                HStack {
+                                    if hasRightIcon {
+                                        rightIcon()
+                                    } else {
+                                        Image(systemName: isPassword ? isHidden ? "eye.slash" : "eye" : "xmark")
+                                            .foregroundColor(isError ? .errorDark : .body)
+                                            .font(.system(.body))
+                                    }
+                                }
+                                .frame(width: 40, height: 48, alignment: .center)
+                                .position(x: geometry.size.width - 24, y: 24)
+                                .onTapGesture {
+                                    if hasRightIcon {
+                                        rightIconPerform!()
+                                    } else if isPassword {
+                                        isHidden = !isHidden
+                                    } else {
                                         isFocused = false
-                                    } label: {
-                                        Image(systemName: "chevron.down")
-                                            .font(.system(size: 16))
-                                            .foregroundColor(.primary)
+                                        value.removeAll()
                                     }
+                                }
+                                .transition(.opacity)
+                            }
+                            if hasLeftIcon {
+                                HStack {
+                                    leftIcon()
+                                }
+                                .frame(width: 40, height: 48, alignment: .center)
+                                .position(x: 24, y: 24)
+                                .onTapGesture {
+                                    leftIconPerform!()
                                 }
                             }
                         }
-                        .textInputAutocapitalization(!autocapitalization || isPassword ? .never : nil)
-                        .autocorrectionDisabled(isPassword)
-                        .foregroundColor(.dark)
-                        .disabled(disabled)
-                        .focused($isFocused)
-                        .onChange(of: isFocused) { bool in
-                            withAnimation {
-                                isActive = bool
-                            }
-                        }
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 48)
-                        .padding(.leading, hasLeftIcon ? 44 : 10)
-                        .padding(.trailing, 44)
-                        .placeholder(when: value == "") {
-                            Text(placeholder)
-                                .poppinsFont(.caption)
-                                .foregroundColor(.body)
-                                .padding(.leading, hasLeftIcon ? 44 : 10)
-                        }
-                        .background(background)
-                        .overlay(
-                            Group {
-                                if isActive || isPassword || hasRightIcon {
-                                    HStack {
-                                        if hasRightIcon {
-                                            rightIcon()
-                                        } else {
-                                            Image(systemName: isPassword ? isHidden ? "eye.slash" : "eye" : "xmark")
-                                                .foregroundColor(isError ? .errorDark : .body)
-                                                .font(.system(.body))
-                                        }
-                                    }
-                                    .frame(width: 40, height: 48, alignment: .center)
-                                    .position(x: geometry.size.width - 24, y: 24)
-                                    .onTapGesture {
-                                        if hasRightIcon {
-                                            rightIconPerform!()
-                                        } else if isPassword {
-                                            isHidden = !isHidden
-                                        } else {
-                                            isFocused = false
-                                            value.removeAll()
-                                        }
-                                    }
-                                    .transition(.opacity)
-                                }
-                                if hasLeftIcon {
-                                    HStack {
-                                        leftIcon()
-                                    }
-                                    .frame(width: 40, height: 48, alignment: .center)
-                                    .position(x: 24, y: 24)
-                                    .onTapGesture {
-                                        leftIconPerform!()
-                                    }
-                                }
-                            }
-                        )
-                        .onTapGesture {
-                            isFocused = true
-                        }
+                    )
+                    .onTapGesture {
+                        isFocused = true
+                    }
             }
             .frame(height: 48)
             

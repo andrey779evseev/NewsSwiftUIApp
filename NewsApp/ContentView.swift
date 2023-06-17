@@ -10,6 +10,10 @@ import SwiftUI
 struct ContentView: View {
     @StateObject var auth = AuthService()
     @StateObject var router = Router()
+    @AppStorage("isDarkMode") private var isDarkMode = false
+    @AppStorage("isTouchedDarkMode") private var isTouchedDarkMode = false
+    @Environment(\.colorScheme) var colorScheme
+
     
     var body: some View {
         Group {
@@ -27,10 +31,13 @@ struct ContentView: View {
                     .environmentObject(auth)
             }
         }
-        .background(Color.white)
-        .preferredColorScheme(.light)
+        .background(isDarkMode ? Color.darkmodeBackground : Color.white)
+        .preferredColorScheme(isDarkMode ? .dark : .light)
         .onAppear {
             auth.listenToAuthState()
+            if !isTouchedDarkMode {
+                isDarkMode = colorScheme == .dark
+            }
         }
     }
 }

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct NavBar: View {
     @EnvironmentObject var router: Router
+    @AppStorage("isDarkMode") private var isDarkMode = false
     
     var isHome: Bool {
         router.route == .home ||
@@ -63,6 +64,7 @@ struct NavBar: View {
         }
         .frame(maxWidth: .infinity)
         .frame(height: 60)
+        .background(isDarkMode ? Color.clear : Color.white)
         .barShadow()
     }
 }

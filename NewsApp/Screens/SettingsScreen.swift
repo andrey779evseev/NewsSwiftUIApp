@@ -10,48 +10,30 @@ import SwiftUI
 struct SettingsScreen: View {
     @EnvironmentObject var auth: AuthService
     @EnvironmentObject var router: Router
-    @State private var nightTheme = false
+    @AppStorage("isDarkMode") private var isDarkMode = false
+    @AppStorage("isTouchedDarkMode") private var isTouchedDarkMode = false
     struct ListItem {
         var icon: String
         var name: String
     }
-    private var list = [
-        ListItem(icon: "bell", name: "Уведомления"),
-        ListItem(icon: "lock", name: "Безопасность"),
-        ListItem(icon: "questionmark.circle", name: "Помощь")
-    ]
     var body: some View {
         VStack(spacing: 0) {
-            Group {
-                HStack {
-                    Image(systemName: "arrow.backward")
-                        .font(.system(size: 20))
-                        .foregroundColor(.dark)
-                        .onTapGesture {
-                            router.go(.profile)
-                        }
-                    Spacer()
-                    Text("Настройки")
-                        .poppinsFont(.footnote)
-                        .foregroundColor(.dark)
-                    Spacer()
-                    Text("\t")
-                }
-                .padding(.top, 0)
-                ForEach(list, id: \.name) { item in
-                    HStack(spacing: 4) {
-                        Image(systemName: item.icon)
-                            .font(.system(size: 20))
-                            .foregroundColor(.dark)
-                        Text(item.name)
-                            .poppinsFont(.footnote)
-                            .foregroundColor(.dark)
-                        Spacer()
-                        Image(systemName: "chevron.right")
-                            .font(.system(size: 16))
-                            .foregroundColor(.dark)
+            HStack {
+                Image(systemName: "arrow.backward")
+                    .font(.system(size: 20))
+                    .foregroundColor(.dark)
+                    .onTapGesture {
+                        router.go(.profile)
                     }
-                }
+                Spacer()
+                Text("Настройки")
+                    .poppinsFont(.footnote)
+                    .foregroundColor(.dark)
+                Spacer()
+                Text("\t")
+            }
+            .padding(.bottom, 24)
+            Group {
                 HStack(spacing: 4) {
                     Image(systemName: "moon")
                         .font(.system(size: 20))
@@ -60,7 +42,12 @@ struct SettingsScreen: View {
                         .poppinsFont(.footnote)
                         .foregroundColor(.dark)
                     Spacer()
-                    Toggle("", isOn: $nightTheme)
+                    Toggle("", isOn: $isDarkMode)
+                        .onChange(of: isDarkMode) { _ in
+                            if !isTouchedDarkMode {
+                                isTouchedDarkMode = true
+                            }
+                        }
                 }
                 HStack(spacing: 4) {
                     Image(systemName: "rectangle.portrait.and.arrow.right")

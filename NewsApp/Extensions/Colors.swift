@@ -27,4 +27,6 @@ extension Color {
     static let gray10 = Color("Gray10")
     static let gray20 = Color("Gray20")
     static let gray40 = Color("Gray40")
+    static let darkmodeBackground = Color("DarkmodeBackground")
+    static let darkmodeInputBackground = Color("DarkmodeInputBackground")
 }

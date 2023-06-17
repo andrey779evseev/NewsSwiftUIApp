@@ -12,7 +12,7 @@ import SwiftUI
 struct Editor: View {
     @Binding var text: String
     @FocusState private var isFocused: Bool
-    
+    @AppStorage("isDarkMode") private var isDarkMode = false
     var body: some View {
         ZStack(alignment: .bottomLeading) {
             VStack {
@@ -62,11 +62,12 @@ struct Editor: View {
             }
             .padding(.vertical, 8)
             .padding(.horizontal, 16)
+            .background(isDarkMode ? Color.darkmodeInputBackground : Color.white)
             .clipShape(RoundedRectangle(cornerRadius: 6))
             .cardShadow()
             .padding([.leading, .bottom], 8)
         }
-        .background(Color.white)
+        .background(isDarkMode ? Color.darkmodeBackground : Color.white)
     }
 }
 

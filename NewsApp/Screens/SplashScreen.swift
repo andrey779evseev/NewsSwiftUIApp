@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SplashScreen: View {
+    @AppStorage("isDarkMode") private var isDarkMode = false
     var body: some View {
         VStack {
             Spacer()
@@ -23,6 +24,7 @@ struct SplashScreen: View {
             Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(isDarkMode ? Color.darkmodeBackground : Color.white)
     }
 }
 

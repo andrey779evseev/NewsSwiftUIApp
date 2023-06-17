@@ -11,7 +11,7 @@ struct HomeScreen: View {
     var namespace: Namespace.ID
     @EnvironmentObject var router: Router
     @EnvironmentObject var auth: AuthService
-    
+    @AppStorage("isDarkMode") private var isDarkMode = false
     @State private var popularPosts: [ExtendedPostModel] = []
     @State private var latestPosts: [ExtendedPostModel] = []
     @State private var isLoading = true
@@ -30,7 +30,7 @@ struct HomeScreen: View {
                 Spacer()
                 RoundedRectangle(cornerRadius: 6)
                     .frame(width: 32, height: 32)
-                    .foregroundColor(.white)
+                    .foregroundColor(isDarkMode ? .darkmodeInputBackground : .white)
                     .shadow(color: .dark.opacity(0.15), radius: 10)
                     .overlay(
                         Image(systemName: "bell")
@@ -51,7 +51,7 @@ struct HomeScreen: View {
                 
                 Text("Поиск")
                     .poppinsFont(.caption)
-                    .foregroundColor(.placeholder)
+                    .foregroundColor(isDarkMode ? .white : .placeholder)
                 
                 Spacer()
                 
@@ -61,8 +61,15 @@ struct HomeScreen: View {
             }
             .padding(.vertical, 12)
             .padding(.horizontal, 10)
-            .background(Color.white)
-            .overlay(RoundedRectangle(cornerRadius: 6).stroke(Color.body))
+            .background(
+                ZStack {
+                    if isDarkMode {
+                        RoundedRectangle(cornerRadius: 6).fill(Color.darkmodeInputBackground)
+                    } else {
+                        RoundedRectangle(cornerRadius: 6).stroke(Color.body)
+                    }
+                }
+            )
             .onTapGesture {
                 router.go(.search)
             }
@@ -77,7 +84,7 @@ struct HomeScreen: View {
                         .foregroundColor(.dark)
                     Spacer()
                     Button {
-                         router.go(.popular)
+                        router.go(.popular)
                     } label: {
                         Text("Смотреть все")
                             .poppinsFont(.caption)
@@ -109,7 +116,7 @@ struct HomeScreen: View {
                         .foregroundColor(.dark)
                     Spacer()
                     Button {
-                         router.go(.latest)
+                        router.go(.latest)
                     } label: {
                         Text("Смотреть все")
                             .poppinsFont(.caption)

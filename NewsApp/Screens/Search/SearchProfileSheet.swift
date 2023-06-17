@@ -13,6 +13,7 @@ struct SearchProfileSheet: View {
     var user: UserModel
     var isFollowed: Bool
     @StateObject var userProfileModel = UserProfileViewModel()
+    @AppStorage("isDarkMode") private var isDarkMode = false
     
     @State private var followersCount = 0
     @State private var followingCount = 0
@@ -34,7 +35,7 @@ struct SearchProfileSheet: View {
                 .environmentObject(auth)
         }
         .padding(.all, 24)
-        .background(Color.white)
+        .background(isDarkMode ? Color.darkmodeBackground : Color.white)
         .task {
             self.followersCount = await FollowRepository.getFollowersCount(auth.user!.id!)
             self.followingCount = await FollowRepository.getFollowingCount(auth.user!.id!)

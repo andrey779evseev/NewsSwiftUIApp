@@ -10,7 +10,7 @@ import SwiftUI
 struct EditProfileSheet: View {
     @EnvironmentObject var auth: AuthService
     @Environment(\.dismiss) var dismiss
-    
+    @AppStorage("isDarkMode") private var isDarkMode = false
     @State private var isLoading = false
     @State private var error: EditProfile.Error = .none
     @State private var nickname = ""
@@ -64,7 +64,7 @@ struct EditProfileSheet: View {
             Spacer()
         }
         .padding(.all, 24)
-        .background(Color.white)
+        .background(isDarkMode ? Color.darkmodeBackground : Color.white)
         .onAppear {
             nickname = auth.user!.nickname
             name = auth.user!.name

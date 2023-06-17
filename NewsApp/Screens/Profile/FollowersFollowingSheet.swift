@@ -11,7 +11,7 @@ struct FollowersFollowingSheet: View {
     var isFollowers: Bool
     var user: UserModel
     @Environment(\.dismiss) var dismiss
-    
+    @AppStorage("isDarkMode") private var isDarkMode = false
     @State private var users: [UserModel] = []
     @State private var following: [FollowModel] = []
     @State private var isLoading = true
@@ -68,7 +68,7 @@ struct FollowersFollowingSheet: View {
             }
         }
         .padding(.all, 24)
-        .background(Color.white)
+        .background(isDarkMode ? Color.darkmodeBackground : Color.white)
         .task {
             if isFollowers {
                 self.users = await FollowRepository.getFollowersModels(user.id!)

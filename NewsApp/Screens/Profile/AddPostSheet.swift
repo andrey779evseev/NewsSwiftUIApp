@@ -11,7 +11,7 @@ import PhotosUI
 struct AddPostSheet: View {
     @EnvironmentObject var auth: AuthService
     @Environment(\.dismiss) var dismiss
-    
+    @AppStorage("isDarkMode") private var isDarkMode = false
     @State private var selectedImage: PhotosPickerItem?
     @State private var image: String?
     
@@ -73,7 +73,7 @@ struct AddPostSheet: View {
                             } else {
                                 ZStack {
                                     let rect = RoundedRectangle(cornerRadius: 6)
-                                    rect.fill(Color.gray20)
+                                    rect.fill(isDarkMode ? Color.darkmodeInputBackground : Color.gray20)
                                     rect
                                         .strokeBorder(style: StrokeStyle(dash: [10], dashPhase: 10))
                                         .foregroundColor(.body)
@@ -135,7 +135,7 @@ struct AddPostSheet: View {
                 .font(.system(size: 20))
                 .foregroundColor(.body)
                 
-                UiButton(type: .secondary, size: .big, text: "Опубликовать", isLoading: isLoading) {
+                UiButton(type: isDarkMode ? .primary : .secondary, size: .big, text: "Опубликовать", isLoading: isLoading) {
                     publish()
                 }
             }
@@ -143,7 +143,7 @@ struct AddPostSheet: View {
             .padding(.horizontal, 24)
             .barShadow()
         }
-        .background(Color.white)
+        .background(isDarkMode ? Color.darkmodeBackground : Color.white)
     }
 }
 

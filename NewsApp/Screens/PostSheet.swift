@@ -12,6 +12,7 @@ struct PostSheet: View {
     @Binding var post: ExtendedPostModel
     var hideBtn: Bool = false
     @Environment(\.dismiss) var dismiss
+    @AppStorage("isDarkMode") private var isDarkMode = false
     @State private var isCommentsScreen = false
     
     @State private var followed: FollowModel? = nil
@@ -174,7 +175,7 @@ struct PostSheet: View {
                 }
             }
         }
-        .background(Color.white)
+        .background(isDarkMode ? Color.darkmodeBackground : Color.white)
         .task {
             followed = await FollowRepository.getFollowed(post.userUid, by: auth.user!.id!)
             isLoadingFollowModel = false
