@@ -19,6 +19,8 @@
 		491AD02029DEB89A002212BF /* PostRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491AD01F29DEB89A002212BF /* PostRepository.swift */; };
 		491AD02229DEB934002212BF /* PostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491AD02129DEB934002212BF /* PostModel.swift */; };
 		491AD02529DECD65002212BF /* DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491AD02429DECD65002212BF /* DateFormatter.swift */; };
+		4920BF092A40B58C006FCC4C /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 4920BF082A40B58C006FCC4C /* GoogleSignIn */; };
+		4920BF0F2A40C637006FCC4C /* FacebookLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 4920BF0E2A40C637006FCC4C /* FacebookLogin */; };
 		4927787829D43DC300DDB789 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4927787729D43DC300DDB789 /* UserProfile.swift */; };
 		4927787B29D43F6300DDB789 /* ProfileScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4927787A29D43F6300DDB789 /* ProfileScreen.swift */; };
 		4927787D29D4507700DDB789 /* SettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4927787C29D4507700DDB789 /* SettingsScreen.swift */; };
@@ -103,6 +105,7 @@
 		491AD01F29DEB89A002212BF /* PostRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRepository.swift; sourceTree = "<group>"; };
 		491AD02129DEB934002212BF /* PostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostModel.swift; sourceTree = "<group>"; };
 		491AD02429DECD65002212BF /* DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatter.swift; sourceTree = "<group>"; };
+		4920BF0C2A40C366006FCC4C /* NewsApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NewsApp.entitlements; sourceTree = "<group>"; };
 		4927787729D43DC300DDB789 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		4927787A29D43F6300DDB789 /* ProfileScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileScreen.swift; sourceTree = "<group>"; };
 		4927787C29D4507700DDB789 /* SettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreen.swift; sourceTree = "<group>"; };
@@ -175,12 +178,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4920BF0F2A40C637006FCC4C /* FacebookLogin in Frameworks */,
 				49D1AC9C29CB56B9004A651C /* WrappingStack in Frameworks */,
 				49D1ACA629CB9981004A651C /* FirebaseAuth in Frameworks */,
 				49D1ACA829CB9981004A651C /* FirebaseFirestore in Frameworks */,
 				49ED210229E42FCC003B5A6D /* NukeUI in Frameworks */,
 				49D1ACAC29CB9981004A651C /* FirebaseStorage in Frameworks */,
 				49D1ACAA29CB9981004A651C /* FirebaseFirestoreSwift in Frameworks */,
+				4920BF092A40B58C006FCC4C /* GoogleSignIn in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -412,6 +417,7 @@
 		49E3001929C8E7B20034CE20 /* NewsApp */ = {
 			isa = PBXGroup;
 			children = (
+				4920BF0C2A40C366006FCC4C /* NewsApp.entitlements */,
 				491AD02329DECD4C002212BF /* Utils */,
 				49D1AC9129CB37C9004A651C /* Database */,
 				49DE5EDA29C9DFD200CAA06A /* Components */,
@@ -461,6 +467,8 @@
 				49D1ACA929CB9981004A651C /* FirebaseFirestoreSwift */,
 				49D1ACAB29CB9981004A651C /* FirebaseStorage */,
 				49ED210129E42FCC003B5A6D /* NukeUI */,
+				4920BF082A40B58C006FCC4C /* GoogleSignIn */,
+				4920BF0E2A40C637006FCC4C /* FacebookLogin */,
 			);
 			productName = NewsApp;
 			productReference = 49E3001729C8E7B20034CE20 /* NewsApp.app */;
@@ -494,6 +502,8 @@
 				49D1AC9A29CB56B8004A651C /* XCRemoteSwiftPackageReference "swiftui-wrapping-stack" */,
 				49D1ACA429CB9980004A651C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				49ED210029E42FCC003B5A6D /* XCRemoteSwiftPackageReference "Nuke" */,
+				4920BF072A40B58C006FCC4C /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+				4920BF0D2A40C637006FCC4C /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */,
 			);
 			productRefGroup = 49E3001829C8E7B20034CE20 /* Products */;
 			projectDirPath = "";
@@ -721,6 +731,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = NewsApp/NewsApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"NewsApp/Preview Content\"";
@@ -752,6 +763,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = NewsApp/NewsApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"NewsApp/Preview Content\"";
@@ -802,6 +814,22 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		4920BF072A40B58C006FCC4C /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.0;
+			};
+		};
+		4920BF0D2A40C637006FCC4C /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/facebook/facebook-ios-sdk?fbclid=IwAR1Q_rdbdFdiAM5GoXOvuTIE79RaUT1np10XdvChayEI6t2RSD46fo95y-o";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 14.0.0;
+			};
+		};
 		49D1AC9A29CB56B8004A651C /* XCRemoteSwiftPackageReference "swiftui-wrapping-stack" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/diniska/swiftui-wrapping-stack";
@@ -829,6 +857,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		4920BF082A40B58C006FCC4C /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4920BF072A40B58C006FCC4C /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		4920BF0E2A40C637006FCC4C /* FacebookLogin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4920BF0D2A40C637006FCC4C /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */;
+			productName = FacebookLogin;
+		};
 		49D1AC9B29CB56B9004A651C /* WrappingStack */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 49D1AC9A29CB56B8004A651C /* XCRemoteSwiftPackageReference "swiftui-wrapping-stack" */;

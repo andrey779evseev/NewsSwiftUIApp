@@ -16,6 +16,7 @@ struct AuthForm: View {
     @State var error: AuthService.Error = .none
     @State var isLoading = false
     @State var rememberMe = true
+    @State var showingOAuthAlert = false
     
     func validate () -> Bool {
         if email.isEmpty {
@@ -63,7 +64,6 @@ struct AuthForm: View {
         } else {
             auth.signUp(email: email, password: password) { error in
                 if let error = error {
-                    print(error)
                     self.error = error
                 }
                 isLoading = false
@@ -153,14 +153,33 @@ struct AuthForm: View {
                 .frame(maxWidth: .infinity, alignment: .center)
             
             HStack(spacing: 30) {
-                UiButton(type: .secondary, size: .medium, text: "Facebook", perform: {}) {
+                UiButton(type: .secondary, size: .medium, text: "Facebook") {
+                    isLoading = true
+                    auth.facebookSignIn() { error in
+                        isLoading = false
+                        if let error = error, error == .oautherror {
+                            showingOAuthAlert = true
+                        }
+                    }
+                } leftIcon: {
                     Image("Facebook")
                 }
-                UiButton(type: .secondary, size: .medium, text: "Google", perform: {}) {
+                UiButton(type: .secondary, size: .medium, text: "Google") {
+                    isLoading = true
+                    auth.googleSignIn() { error in
+                        isLoading = false
+                        if let error = error, error == .oautherror {
+                            showingOAuthAlert = true
+                        }
+                    }
+                } leftIcon: {
                     Image("Google")
                 }
             }
             .padding(.bottom, 16)
+            .alert("При авторизации через сторонний сервис произошла ошибка", isPresented: $showingOAuthAlert) {
+                Button("Oк", role: .cancel) { }
+            }
             
             HStack(spacing: 0) {
                 Text(isLogin ? "еще нет акаунта ? " : "Уже есть аккаунт ? ")

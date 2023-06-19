@@ -22,8 +22,8 @@ struct UserModel: Codable, Identifiable {
     var initialized: Bool
     
     static func fromSession(_ session: User) -> Self {
-        Self(
-            email: session.email!,
+        return Self(
+            email: session.email ?? "Facebook Account: \(session.displayName!)",
             name: "",
             nickname: "",
             photo: "",

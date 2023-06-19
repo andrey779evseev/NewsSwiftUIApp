@@ -7,6 +7,11 @@
 
 import SwiftUI
 import FirebaseAuth
+import GoogleSignIn
+import FirebaseCore
+import FacebookLogin
+import FBSDKLoginKit
+
 
 final class AuthService: ObservableObject {
     @Published var session: User? = nil
@@ -54,7 +59,7 @@ final class AuthService: ObservableObject {
                 case "The email address is badly formatted.":
                     completion(.invalidEmailFormat)
                 case "There is no user record corresponding to this identifier. The user may have been deleted.",
-                "The password is invalid or the user does not have a password.":
+                    "The password is invalid or the user does not have a password.":
                     completion(.userDoesNotExist)
                 default:
                     print("an error occurred: " + error.localizedDescription)
@@ -64,6 +69,64 @@ final class AuthService: ObservableObject {
                 completion(nil)
             }
             return
+        }
+    }
+    
+    func googleSignIn(completion: @escaping (_ error: Error?) -> Void) {
+        guard let clientID = FirebaseApp.app()?.options.clientID else { return }
+        
+        let config = GIDConfiguration(clientID: clientID)
+        
+        GIDSignIn.sharedInstance.configuration = config
+        
+        guard let screen = UIApplication.shared.connectedScenes.first as? UIWindowScene else { return }
+        
+        guard let root = screen.windows.first?.rootViewController else { return }
+        
+        GIDSignIn.sharedInstance.signIn(withPresenting: root) { signResult, error in
+            
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }
+            
+            guard let user = signResult?.user,
+                  let idToken = user.idToken else { return }
+            
+            let accessToken = user.accessToken
+            
+            let credential = GoogleAuthProvider.credential(withIDToken: idToken.tokenString, accessToken: accessToken.tokenString)
+            
+            Auth.auth().signIn(with: credential) { _, error in
+                if let _ = error {
+                    completion(.oautherror)
+                } else {
+                    completion(nil)
+                }
+                return
+            }
+            
+        }
+    }
+    
+    func facebookSignIn(completion: @escaping (_ error: Error?) -> Void) {
+        let loginManager = LoginManager()
+        loginManager.logIn(configuration: LoginConfiguration(tracking: .enabled)) { result in
+            switch result {
+            case .cancelled:
+                print("facebook login was canceled")
+            case .failed:
+                completion(.oautherror)
+            case .success(_, _, let token):
+                Auth.auth().signIn(with: FacebookAuthProvider.credential(withAccessToken: token!.tokenString)) { _, error in
+                    if let _ = error {
+                        completion(.oautherror)
+                    } else {
+                        completion(nil)
+                    }
+                    return
+                }
+            }
         }
     }
     
@@ -91,6 +154,8 @@ final class AuthService: ObservableObject {
     }
     
     func signOut() {
+        GIDSignIn.sharedInstance.signOut()
+        
         do {
             try Auth.auth().signOut()
             self.session = nil
@@ -107,7 +172,7 @@ final class AuthService: ObservableObject {
         return auth
     }
     
-    public enum Error {
+    public enum Error: Equatable {
         case invalidEmailFormat
         case userDoesNotExist
         case unexpected(error: String)
@@ -118,5 +183,6 @@ final class AuthService: ObservableObject {
         case weakPasswordCapital
         case weakPasswordNumber
         case alreadyExist
+        case oautherror
     }
 }
